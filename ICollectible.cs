@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Mole_on_Parole
 {
-    public interface ICollectible
+    public interface ICollectible : IDrawable, IUpdatable
     {
         string Name { get; }
     }
