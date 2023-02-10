@@ -42,7 +42,7 @@ namespace Mole_on_Parole
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Olive);
 
             // TODO: Add your drawing code here
 
