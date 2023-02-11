@@ -41,7 +41,7 @@ namespace Mole_on_Parole
             _position = molePosition + new Vector2(-35, 0);
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch, Vector2 position)
         {
             Vector2 scale = new Vector2(0.2f, 0.2f); //80% smaller
 
@@ -70,7 +70,7 @@ namespace Mole_on_Parole
 
         public void DetectMoleClose(Mole mole)
         {
-            if (Vector2.Distance(_position, mole.getPosition()) <= eatRange)
+            if (Vector2.Distance(_position, mole.GetPosition()) <= eatRange)
             {
                 mole.SetAttachedValuable(this);
                 Console.WriteLine("Mole picked up valuable");

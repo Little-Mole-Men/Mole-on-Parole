@@ -25,7 +25,11 @@
 /processorParam:TextureFormat=Color
 /build:ball.png
 
+<<<<<<< HEAD
 #begin worm.png
+=======
+#begin grass.png
+>>>>>>> 582c2bcc4b2b77241f5bb25cb7f7f8a105700301
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -35,5 +39,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
+<<<<<<< HEAD
 /build:worm.png
+=======
+/build:grass.png
+>>>>>>> 582c2bcc4b2b77241f5bb25cb7f7f8a105700301
 

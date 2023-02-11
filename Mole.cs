@@ -33,16 +33,23 @@ namespace Mole_on_Parole
             _baseAcceleration = 2 * _baseMaxSpeed;
         }
 
-        public Vector2 getPosition()
+        public Vector2 GetPosition()
         {
             return _position;
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public void SetPosition(Vector2 position)
         {
-            spriteBatch.Draw(_texture, _position, null, Color.White, 0f,
-                new Vector2(_texture.Width / 2, _texture.Height / 2), Vector2.One, SpriteEffects.None, 0f);
+            _position = position;
         }
+
+        public void Draw(SpriteBatch spriteBatch, Vector2 position)
+        {
+            Vector2 pos = Vector2.Add(Vector2.Negate(position), _position);
+            pos += new Vector2(255, 255);
+            spriteBatch.Draw(_texture, pos, null, Color.Brown, 0f, new Vector2(_texture.Width / 2, _texture.Height / 2), Vector2.One, SpriteEffects.None, 0f); 
+        }
+
 
         public void Update(double totalSeconds)
         {

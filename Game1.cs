@@ -9,6 +9,7 @@ namespace Mole_on_Parole
     public class Game1 : Game
     {
         Mole mole;
+        Map map;
         Man man;
         Earthworm worm;
         List<Earthworm> earthworms = new List<Earthworm>();
@@ -40,6 +41,9 @@ namespace Mole_on_Parole
 
 
             mole = new Mole(moleTexture);
+            mole.SetPosition(new Vector2(255, 255));
+            map = new Map(1000, 1000, 1, Content.Load<Texture2D>("grass"), Content.Load<Texture2D>("grass"));
+            map.setViewRadius(20);
             man = new Man(manTexture, new Vector2(_graphics.PreferredBackBufferWidth / 2,
 _graphics.PreferredBackBufferHeight / 2));
             
@@ -93,7 +97,7 @@ _graphics.PreferredBackBufferHeight / 2));
             }
 
             mole.Update(gameTime.ElapsedGameTime.TotalSeconds);
-            man.UpdatePos(gameTime.ElapsedGameTime.TotalSeconds, mole.getPosition());
+            man.UpdatePos(gameTime.ElapsedGameTime.TotalSeconds, mole.GetPosition());
             man.DetectAndKillMole(gameTime.ElapsedGameTime.TotalSeconds, mole);
             earthworms.RemoveAll(elem => elem.DetectMoleClose(mole) == true);
             foreach (var valuable in collectibles)
@@ -101,7 +105,7 @@ _graphics.PreferredBackBufferHeight / 2));
                 valuable.DetectMoleClose(mole);
                 if (valuable.getAttached())
                 {
-                    valuable.SetPosition(mole.getPosition());
+                    valuable.SetPosition(mole.GetPosition());
                 }
             }
                 
@@ -114,17 +118,18 @@ _graphics.PreferredBackBufferHeight / 2));
 
             // TODO: Add your drawing code here
             _spriteBatch.Begin();
-            mole.Draw(_spriteBatch);
-            man.Draw(_spriteBatch);
             foreach (var warm in earthworms)
             {
-                worm.Draw(_spriteBatch);
+                worm.Draw(_spriteBatch, mole.GetPosition());
             }
             foreach (var valuable in collectibles)
             {
-                valuable.Draw(_spriteBatch);
+                valuable.Draw(_spriteBatch, mole.GetPosition());
             }
 
+            map.Draw(_spriteBatch, mole.GetPosition());
+            mole.Draw(_spriteBatch, mole.GetPosition());
+            man.Draw(_spriteBatch, mole.GetPosition());
             _spriteBatch.End();
 
             base.Draw(gameTime);

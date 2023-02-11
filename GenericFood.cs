@@ -28,7 +28,7 @@ namespace Mole_on_Parole
             _position = position;
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch, Vector2 position)
         {
             Vector2 scale = new Vector2(0.5f, 0.5f); //50% smaller
 
@@ -57,7 +57,7 @@ namespace Mole_on_Parole
 
         public bool DetectMoleClose(Mole mole)
         {
-            if (Vector2.Distance(_position, mole.getPosition()) <= eatRange)
+            if (Vector2.Distance(_position, mole.GetPosition()) <= eatRange)
             {
                 mole.EatWorm(value);
                 return true;
