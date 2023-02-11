@@ -15,7 +15,8 @@ namespace Mole_on_Parole
     public class Mole : IDrawable, IUpdatable
     {
         private int _lives;
-        private ICollectible _attachedCollectible = null;
+        private IValuable _attachedValuable = null;
+        private int _digSpaces = 50;
         private Vector2 _velocity;
         private Vector2 _position;
         private float _baseMaxSpeed = 200;
@@ -41,6 +42,7 @@ namespace Mole_on_Parole
         {
             _position = position;
         }
+
         public void Draw(SpriteBatch spriteBatch, Vector2 position)
         {
             Vector2 pos = Vector2.Add(Vector2.Negate(position), _position);
@@ -51,8 +53,8 @@ namespace Mole_on_Parole
 
         public void Update(double totalSeconds)
         {
-            _acceleration = _baseAcceleration / ((_attachedCollectible != null) ? _attachedCollectible.GetWeight() : 1);
-            _maxSpeed = _baseMaxSpeed / ((_attachedCollectible != null) ? _attachedCollectible.GetWeight() : 1);
+            _acceleration = _baseAcceleration / ((_attachedValuable != null) ? _attachedValuable.GetWeight() : 1);
+            _maxSpeed = _baseMaxSpeed / ((_attachedValuable != null) ? _attachedValuable.GetWeight() : 1);
             _position += _velocity * (float)totalSeconds;
         }
 
@@ -112,7 +114,18 @@ namespace Mole_on_Parole
                 Console.WriteLine("MOLE HAS BEEN KILLED ");
                 Console.WriteLine(_lives);
             };
-            
+
+        }
+
+        public void EatWorm(int value)
+        {
+            _digSpaces += value;
+            Console.WriteLine("Dig spaces up by 2");
+        }
+
+        public void SetAttachedValuable(GenericValuable valuable)
+        {
+            _attachedValuable = valuable;
         }
     }
 }

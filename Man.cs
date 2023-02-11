@@ -11,8 +11,7 @@ namespace Mole_on_Parole
 {
     public class Man : IUpdatable, IDrawable
     {
-
-        private ICollectible _attachedCollectible = null;
+        private IValuable _attachedCollectible = null;
         private Vector2 _velocity;
         private Vector2 _position;
         private float _baseMaxSpeed = 50;

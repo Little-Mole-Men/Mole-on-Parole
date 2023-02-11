@@ -8,5 +8,6 @@ namespace Mole_on_Parole
 {
     internal interface IValuable : ICollectible
     {
+        public float GetWeight();
     }
 }

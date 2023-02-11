@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Mole_on_Parole
@@ -10,10 +11,15 @@ namespace Mole_on_Parole
         Mole mole;
         Map map;
         Man man;
-        List<ICollectible> collectibles;
+        Earthworm worm;
+        List<Earthworm> earthworms = new List<Earthworm>();
+        GenericValuable valuable;
+        List<GenericValuable> collectibles = new List<GenericValuable>();
         Grid grid;
         Texture2D moleTexture;
         Texture2D manTexture;
+        Texture2D wormTexture;
+        Texture2D valuableTexture;
 
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
@@ -30,12 +36,22 @@ namespace Mole_on_Parole
             // TODO: Add your initialization logic here
             moleTexture = Content.Load<Texture2D>("ball");
             manTexture = Content.Load<Texture2D>("ball");
+            wormTexture = Content.Load<Texture2D>("ball");
+            valuableTexture = Content.Load<Texture2D>("ball");
+
+
             mole = new Mole(moleTexture);
             mole.SetPosition(new Vector2(255, 255));
             map = new Map(1000, 1000, 1, Content.Load<Texture2D>("grass"), Content.Load<Texture2D>("grass"));
             map.setViewRadius(20);
             man = new Man(manTexture, new Vector2(_graphics.PreferredBackBufferWidth / 2,
 _graphics.PreferredBackBufferHeight / 2));
+            
+            worm = new Earthworm(wormTexture, new Vector2(100, 100));
+            earthworms.Add(worm);
+
+            valuable = new GenericValuable(valuableTexture, new Vector2(300, 300), 2, 10);
+            collectibles.Add(valuable);
             base.Initialize();
         }
 
@@ -83,6 +99,16 @@ _graphics.PreferredBackBufferHeight / 2));
             mole.Update(gameTime.ElapsedGameTime.TotalSeconds);
             man.UpdatePos(gameTime.ElapsedGameTime.TotalSeconds, mole.GetPosition());
             man.DetectAndKillMole(gameTime.ElapsedGameTime.TotalSeconds, mole);
+            earthworms.RemoveAll(elem => elem.DetectMoleClose(mole) == true);
+            foreach (var valuable in collectibles)
+            {
+                valuable.DetectMoleClose(mole);
+                if (valuable.getAttached())
+                {
+                    valuable.SetPosition(mole.GetPosition());
+                }
+            }
+                
             base.Update(gameTime);
         }
 
@@ -92,6 +118,15 @@ _graphics.PreferredBackBufferHeight / 2));
 
             // TODO: Add your drawing code here
             _spriteBatch.Begin();
+            foreach (var warm in earthworms)
+            {
+                worm.Draw(_spriteBatch, mole.GetPosition());
+            }
+            foreach (var valuable in collectibles)
+            {
+                valuable.Draw(_spriteBatch, mole.GetPosition());
+            }
+
             map.Draw(_spriteBatch, mole.GetPosition());
             mole.Draw(_spriteBatch, mole.GetPosition());
             man.Draw(_spriteBatch, mole.GetPosition());
