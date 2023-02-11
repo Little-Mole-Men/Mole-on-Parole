@@ -31,9 +31,15 @@ namespace Mole_on_Parole
             _velocity = new Vector2(0, 0);
             _baseAcceleration = 2 * _baseMaxSpeed;
         }
+
+        public Vector2 getPosition()
+        {
+            return _position;
+        }
+
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_texture, _position, null, Color.Brown, 0f, 
+            spriteBatch.Draw(_texture, _position, null, Color.White, 0f, 
                 new Vector2(_texture.Width / 2, _texture.Height / 2), Vector2.One, SpriteEffects.None, 0f);
         }
 
@@ -90,6 +96,17 @@ namespace Mole_on_Parole
                     }
                     break;
             }
+        }
+
+        public void GetKilled()
+        {
+            if (_lives != 0)
+            {
+                _lives--;
+                Console.WriteLine("MOLE HAS BEEN KILLED ");
+                Console.WriteLine(_lives);
+            };
+            
         }
     }
 }
