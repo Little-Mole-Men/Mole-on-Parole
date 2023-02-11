@@ -8,6 +8,7 @@ namespace Mole_on_Parole
     public class Game1 : Game
     {
         Mole mole;
+        Map map;
         List<ICollectible> collectibles;
         Grid grid;
         Texture2D moleTexture;
@@ -27,8 +28,13 @@ namespace Mole_on_Parole
             // TODO: Add your initialization logic here
             moleTexture = Content.Load<Texture2D>("ball");
             mole = new Mole(moleTexture);
-
+            mole.SetPosition(new Vector2(255, 255));
+            map = new Map(1000, 1000, 1, Content.Load<Texture2D>("grass"), Content.Load<Texture2D>("grass"));
+            map.setViewRadius(10);
             base.Initialize();
+
+
+
         }
 
         protected override void LoadContent()
@@ -82,7 +88,8 @@ namespace Mole_on_Parole
 
             // TODO: Add your drawing code here
             _spriteBatch.Begin();
-            mole.Draw(_spriteBatch);
+            map.Draw(_spriteBatch, mole.GetPosition());
+            mole.Draw(_spriteBatch, mole.GetPosition());
             _spriteBatch.End();
 
             base.Draw(gameTime);

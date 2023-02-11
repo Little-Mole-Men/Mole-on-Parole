@@ -9,7 +9,7 @@ namespace Mole_on_Parole
 {
     public class Man : IUpdatable, IDrawable
     {
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch, Microsoft.Xna.Framework.Vector2 position)
         {
             throw new NotImplementedException();
         }
