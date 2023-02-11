@@ -8,5 +8,6 @@ namespace Mole_on_Parole
 {
     public interface IFood : ICollectible
     {
+
     }
 }

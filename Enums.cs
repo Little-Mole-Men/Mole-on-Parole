@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace Mole_on_Parole
 {
-    public interface ICollectible : IDrawable, IUpdatable
+    public enum Directions
     {
-        public float GetWeight();
-        string Name { get; }
+        UP,
+        DOWN,
+        LEFT,
+        RIGHT
     }
 }

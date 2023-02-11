@@ -8,6 +8,6 @@ namespace Mole_on_Parole
 {
     public interface IUpdatable
     {
-        public void Update();
+        public void Update(double totalSeconds);
     }
 }
