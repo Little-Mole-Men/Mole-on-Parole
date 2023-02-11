@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Mole_on_Parole
 {
-    internal interface Interface1
+    internal interface IValuable : ICollectible
     {
     }
 }

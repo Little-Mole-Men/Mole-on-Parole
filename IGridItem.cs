@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace Mole_on_Parole
 {
-    public interface IGridItem : IDrawable
+    public abstract class GridItem : IDrawable
     {
+        public void Draw()
+        {
+            // TODO: draw the sprite where it is. surprise!
+        }
     }
 }

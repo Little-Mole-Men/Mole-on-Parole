@@ -1,11 +1,16 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
 
 namespace Mole_on_Parole
 {
     public class Game1 : Game
     {
+        Mole mole;
+        List<ICollectible> collectibles;
+        Grid grid;
+
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
