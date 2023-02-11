@@ -26,6 +26,8 @@ namespace Mole_on_Parole
         private Texture2D _texture;
         private int _score;
         public bool Underground { get; set; }
+        public int _frameTimer = 0;
+        public int _animationFrame = 0;
 
         public Mole(Texture2D moleTexture)
         {
@@ -54,9 +56,41 @@ namespace Mole_on_Parole
 
         public void Draw(SpriteBatch spriteBatch, Vector2 position, bool underground, Vector2 center)
         {
+            _frameTimer++;
+
             Vector2 pos = Vector2.Add(Vector2.Negate(position), _position);
             pos += center;
-            spriteBatch.Draw(_texture, pos, null, Color.Brown, 0f, new Vector2(_texture.Width / 2, _texture.Height / 2), Vector2.One, SpriteEffects.None, 0f); 
+            Rectangle sourceRectangle;
+
+            if (_frameTimer = 5)
+            {
+                _frameTimer = 0
+                _animationFrame = (_animationFrame + 1) % 2;
+            }
+
+            if ((_velocity.X * _velocity.X)>(_velocity.Y * _velocity.Y))
+            {
+                if(_velocity.X > 0)
+                {
+                    sourceRectangle = new Rectangle(32*_animationFrame, 0, 32+(32*_animationFrame), 32);
+                }
+                else
+                {
+                    sourceRectangle = new Rectangle(32 * _animationFrame, 0, 32 + (32 * _animationFrame), 32);
+                }
+            }
+            else
+            {
+                if (_velocity.Y > 0)
+                {
+
+                }
+                else
+                {
+
+                }
+            }
+            spriteBatch.Draw(_texture, pos, null, Color.Brown, 0f, new Vector2(_texture.Width / 2, _texture.Height / 2), Vector2.One, SpriteEffects., 0f); 
         }
 
 
