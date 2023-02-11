@@ -30,7 +30,7 @@ namespace Mole_on_Parole
             _grassTexture = grass;
             _concreteTexture = concrete;
 
-            double _concreteChance = 0.3;
+            double _concreteChance = 0.5;
 
             for (int x = 0; x<sizeX; x++)
             {
@@ -38,11 +38,11 @@ namespace Mole_on_Parole
                 {
                     if (_concretePerlin.perlin(x * _concretePerlinScale, y * _concretePerlinScale, 0) < _concreteChance)
                     {
-                        _Overworld[x,y] = new Concrete(new Vector2(x, y), new Color(150, 150, 150), _concreteTexture);
+                        _Overworld[x,y] = new Concrete(new Vector2(x*16, y*16), new Color(150, 150, 150), _concreteTexture);
                     }
                     else
                     {
-                        _Overworld[x,y] = new Grass(new Vector2(x, y), Color.Green, _grassTexture);
+                        _Overworld[x,y] = new Grass(new Vector2(x*16, y*16), Color.Green, _grassTexture);
                     }
                 }
             }
@@ -54,7 +54,13 @@ namespace Mole_on_Parole
         }
         public void Draw(SpriteBatch spriteBatch, Vector2 position)
         {
-            for (int i = 0; i < (_viewRadius) * 2; i++)
+            for(int i = 0; i<255; i++)
+            {
+                for (int j = 0; j<255; j++) {
+                    _Overworld[i, j].Draw(spriteBatch, position);
+                }
+            }
+            /*for (int i = 0; i < (_viewRadius) * 2; i++)
             {
                 for (int j = 0; j < (_viewRadius) * 2; j++)
                 {
@@ -65,7 +71,7 @@ namespace Mole_on_Parole
                         _Overworld[(int)(a),(int)(b)].Draw(spriteBatch, position);
                     }
                 }
-            }
+            }*/
         }
 
     }

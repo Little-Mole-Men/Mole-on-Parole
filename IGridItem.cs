@@ -18,7 +18,7 @@ namespace Mole_on_Parole
         {
             Vector2 pos = Vector2.Add(Vector2.Negate(position), _position);
             pos += new Vector2(255, 255);
-            spriteBatch.Draw(_texture, _position*16, _color);
+            spriteBatch.Draw(_texture, pos, _color);
         }
     }
 }

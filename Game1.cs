@@ -32,9 +32,6 @@ namespace Mole_on_Parole
             map = new Map(1000, 1000, 1, Content.Load<Texture2D>("grass"), Content.Load<Texture2D>("grass"));
             map.setViewRadius(10);
             base.Initialize();
-
-
-
         }
 
         protected override void LoadContent()
