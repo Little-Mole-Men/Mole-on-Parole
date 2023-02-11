@@ -33,7 +33,7 @@ namespace Mole_on_Parole
             mole = new Mole(moleTexture);
             mole.SetPosition(new Vector2(255, 255));
             map = new Map(1000, 1000, 1, Content.Load<Texture2D>("grass"), Content.Load<Texture2D>("grass"));
-            map.setViewRadius(10);
+            map.setViewRadius(20);
             man = new Man(manTexture, new Vector2(_graphics.PreferredBackBufferWidth / 2,
 _graphics.PreferredBackBufferHeight / 2));
             base.Initialize();

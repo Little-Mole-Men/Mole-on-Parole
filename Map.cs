@@ -38,11 +38,11 @@ namespace Mole_on_Parole
                 {
                     if (_concretePerlin.perlin(x * _concretePerlinScale, y * _concretePerlinScale, 0) < _concreteChance)
                     {
-                        _Overworld[x,y] = new Concrete(new Vector2(x*16, y*16), new Color(150, 150, 150), _concreteTexture);
+                        _Overworld[x,y] = new Concrete(new Vector2(x*32, y*32), new Color(150, 150, 150), _concreteTexture);
                     }
                     else
                     {
-                        _Overworld[x,y] = new Grass(new Vector2(x*16, y*16), Color.Green, _grassTexture);
+                        _Overworld[x,y] = new Grass(new Vector2(x*32, y*32), Color.Green, _grassTexture);
                     }
                 }
             }
@@ -54,24 +54,28 @@ namespace Mole_on_Parole
         }
         public void Draw(SpriteBatch spriteBatch, Vector2 position)
         {
-            for(int i = 0; i<255; i++)
-            {
-                for (int j = 0; j<255; j++) {
-                    _Overworld[i, j].Draw(spriteBatch, position);
-                }
-            }
-            /*for (int i = 0; i < (_viewRadius) * 2; i++)
+            for (int i = 0; i < (_viewRadius) * 2; i++)
             {
                 for (int j = 0; j < (_viewRadius) * 2; j++)
                 {
-                    float a = ((int) (position.X/16) - _viewRadius) + i;
-                    float b = ((int) (position.Y/16) - _viewRadius) + j;
-                    if (Math.Sqrt(((a * a) + (b * b))) < _viewRadius)
+                    float a = (((int)(position.X) / 32) - _viewRadius) + i;
+                    float b = (((int)(position.Y) / 32) - _viewRadius) + j;
+
+                    float c = (position.X / 32) - a;
+                    float d = (position.Y / 32) - b;
+
+                    double sq = Math.Sqrt((c * c) + (d * d));
+
+                    if (sq < _viewRadius)
                     {
-                        _Overworld[(int)(a),(int)(b)].Draw(spriteBatch, position);
+                        if ((int)a >= 0 && (int)b >= 0)
+                        {
+                            _Overworld[(int)(a), (int)(b)].Draw(spriteBatch, position);
+                        }
+
                     }
                 }
-            }*/
+            }
         }
 
     }
