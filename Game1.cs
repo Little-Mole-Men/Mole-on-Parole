@@ -23,12 +23,14 @@ namespace Mole_on_Parole
 
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+        private Vector2 center;
 
         SpriteFont spriteFont;
 
         private int numWorms = 1000;
         private int numValuables = 20;
 
+        private bool qDown = false;
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -44,10 +46,12 @@ namespace Mole_on_Parole
             wormTexture = Content.Load<Texture2D>("ball");
             valuableTexture = Content.Load<Texture2D>("ball");
 
+            center = new Vector2(_graphics.PreferredBackBufferWidth / 2, _graphics.PreferredBackBufferHeight / 2);
 
             mole = new Mole(moleTexture);
-            mole.SetPosition(new Vector2(255, 255));
-            map = new Map(1000, 1000, 1, Content.Load<Texture2D>("grass"), Content.Load<Texture2D>("grass"));
+            mole.SetPosition(center);
+            Texture2D grass = Content.Load<Texture2D>("grass");
+            map = new Map(1000, 1000, 1, Content.Load<Texture2D>("grass"), Content.Load<Texture2D>("grass"), Content.Load<Texture2D>("grass"), Content.Load<Texture2D>("grass"));
             map.setViewRadius(20);
             man = new Man(manTexture, new Vector2(_graphics.PreferredBackBufferWidth / 2,
 _graphics.PreferredBackBufferHeight / 2));
@@ -114,9 +118,19 @@ _graphics.PreferredBackBufferHeight / 2));
             {
                 mole.Slow(Directions.RIGHT, (float)gameTime.ElapsedGameTime.TotalSeconds);
             }
+            if(kState.IsKeyDown(Keys.Q))
+            {
+                qDown = true;
+            }
+            if(kState.IsKeyUp(Keys.Q) && qDown)
+            {
+                qDown = false;
+                mole.Underground = !mole.Underground;
+            }
 
-            mole.Update(gameTime.ElapsedGameTime.TotalSeconds);
-            man.UpdatePos(gameTime.ElapsedGameTime.TotalSeconds, mole.GetPosition());
+            mole.Update(gameTime.ElapsedGameTime.TotalSeconds, mole.GetPosition());
+            man.Update(gameTime.ElapsedGameTime.TotalSeconds, mole.GetPosition());
+            map.Update(gameTime.ElapsedGameTime.TotalSeconds, mole.GetPosition());
             man.DetectAndKillMole(gameTime.ElapsedGameTime.TotalSeconds, mole);
             earthworms.RemoveAll(elem => elem.DetectMoleClose(mole) == true);
             foreach (var valuable in collectibles)
@@ -133,22 +147,21 @@ _graphics.PreferredBackBufferHeight / 2));
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Olive);
+            GraphicsDevice.Clear(Color.White);
 
             // TODO: Add your drawing code here
-            _spriteBatch.Begin();
+            _spriteBatch.Begin(blendState: BlendState.AlphaBlend);
 
-            map.Draw(_spriteBatch, mole.GetPosition());
+            map.Draw(_spriteBatch, mole.GetPosition(), mole.Underground, center, mole);
             foreach (var worm in earthworms)
             {
-                worm.Draw(_spriteBatch, mole.GetPosition());
+                worm.Draw(_spriteBatch, mole.GetPosition(), mole.Underground, center);
             }
             foreach (var valuable in collectibles)
             {
-                valuable.Draw(_spriteBatch, mole.GetPosition());
+                valuable.Draw(_spriteBatch, mole.GetPosition(), mole.Underground, center);
             }
-            mole.Draw(_spriteBatch, mole.GetPosition());
-            man.Draw(_spriteBatch, mole.GetPosition());
+            man.Draw(_spriteBatch, mole.GetPosition(), mole.Underground, center);
 
             spriteFont = Content.Load<SpriteFont>("File");
 

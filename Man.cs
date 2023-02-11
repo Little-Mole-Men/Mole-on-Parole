@@ -1,10 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
 
 namespace Mole_on_Parole
@@ -31,10 +26,10 @@ namespace Mole_on_Parole
         }
 
 
-        public void Draw(SpriteBatch spriteBatch, Vector2 position)
+        public void Draw(SpriteBatch spriteBatch, Vector2 position, bool underground, Vector2 center)
         {
             Vector2 pos = Vector2.Add(Vector2.Negate(position), _position);
-            pos += new Vector2(255, 255);
+            pos += center;
             spriteBatch.Draw(
                 _texture,
                 pos,
@@ -49,17 +44,12 @@ namespace Mole_on_Parole
 
         }
 
-        public void UpdatePos(double totalSeconds, Vector2 molePosition)
+        public void Update(double totalSeconds, Vector2 molePosition)
         {
             _direction = (molePosition - _position);
-            _direction.Normalize();
+            if(_direction.LengthSquared() != 0) _direction.Normalize();
             _velocity = _direction * _baseMaxSpeed;
             _position += _velocity * (float) totalSeconds;
-        }
-
-        public void Update(double totalSeconds)
-        {
-            throw new NotImplementedException();
         }
 
         public void DetectAndKillMole(double totalSeconds, Mole mole)
