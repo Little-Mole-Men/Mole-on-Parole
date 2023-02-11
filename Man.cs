@@ -11,6 +11,9 @@ namespace Mole_on_Parole
 {
     public class Man : IUpdatable, IDrawable
     {
+<<<<<<< HEAD
+        public void Draw(SpriteBatch spriteBatch, Microsoft.Xna.Framework.Vector2 position)
+=======
         private ICollectible _attachedCollectible = null;
         private Vector2 _velocity;
         private Vector2 _position;
@@ -32,6 +35,7 @@ namespace Mole_on_Parole
 
 
         public void Draw(SpriteBatch spriteBatch)
+>>>>>>> master
         {
 
             spriteBatch.Draw(
