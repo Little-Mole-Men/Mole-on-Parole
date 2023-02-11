@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,6 @@ namespace Mole_on_Parole
 {
     public interface IDrawable
     {
-        public void Draw();
+        public void Draw(SpriteBatch spriteBatch);
     }
 }

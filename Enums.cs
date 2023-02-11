@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace Mole_on_Parole
 {
-    internal interface IValuable : ICollectible
+    public enum Directions
     {
+        UP,
+        DOWN,
+        LEFT,
+        RIGHT
     }
 }

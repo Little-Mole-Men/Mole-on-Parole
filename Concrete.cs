@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Mole_on_Parole
 {
-    public class Concrete : IGridItem
+    public class Concrete : GridItem
     {
+        public Concrete() { }
     }
 }
