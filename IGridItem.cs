@@ -14,10 +14,10 @@ namespace Mole_on_Parole
         protected Vector2 _position;
         protected Color _color;
 
-        public void Draw(SpriteBatch spriteBatch, Vector2 position, bool underground)
+        public void Draw(SpriteBatch spriteBatch, Vector2 position, bool underground, Vector2 center)
         {
             Vector2 pos = Vector2.Add(Vector2.Negate(position), _position);
-            pos += new Vector2(255, 255);
+            pos += center;
             spriteBatch.Draw(_texture, pos, (underground ? 0.3f : 1) * _color);
         }
     }

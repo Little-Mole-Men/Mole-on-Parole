@@ -75,26 +75,26 @@ namespace Mole_on_Parole
         {
             _viewRadius = r;
         }
-        public void Draw(SpriteBatch spriteBatch, Vector2 position, bool underground)
+        public void Draw(SpriteBatch spriteBatch, Vector2 position, bool underground, Vector2 center)
         {
             foreach(Tuple<int, int> coord in coordsToDraw)
             {
-                _Overworld[coord.Item1, coord.Item2].Draw(spriteBatch, position, underground);
+                _Overworld[coord.Item1, coord.Item2].Draw(spriteBatch, position, underground, center);
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch, Vector2 position, bool underground, Mole mole)
+        public void Draw(SpriteBatch spriteBatch, Vector2 position, bool underground, Vector2 center, Mole mole)
         {
             foreach (Tuple<int, int> coord in coordsToDraw)
             {
-                _Underworld[coord.Item1, coord.Item2].Draw(spriteBatch, position, false);
+                _Underworld[coord.Item1, coord.Item2].Draw(spriteBatch, position, false, center);
             }
-            if(underground) mole.Draw(spriteBatch, position, underground);
+            if(underground) mole.Draw(spriteBatch, position, underground, center);
             foreach (Tuple<int, int> coord in coordsToDraw)
             {
-                _Overworld[coord.Item1, coord.Item2].Draw(spriteBatch, position, underground);
+                _Overworld[coord.Item1, coord.Item2].Draw(spriteBatch, position, underground, center);
             }
-            if(!underground) mole.Draw(spriteBatch, position, underground);
+            if(!underground) mole.Draw(spriteBatch, position, underground, center);
         }
 
         public void Update(double totalSeconds, Vector2 position)

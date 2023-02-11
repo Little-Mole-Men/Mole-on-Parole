@@ -23,6 +23,9 @@ namespace Mole_on_Parole
 
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+        private Vector2 center;
+
+        SpriteFont spriteFont;
 
         private int numWorms = 1000;
         private int numValuables = 20;
@@ -43,9 +46,10 @@ namespace Mole_on_Parole
             wormTexture = Content.Load<Texture2D>("ball");
             valuableTexture = Content.Load<Texture2D>("ball");
 
+            center = new Vector2(_graphics.PreferredBackBufferWidth / 2, _graphics.PreferredBackBufferHeight / 2);
 
             mole = new Mole(moleTexture);
-            mole.SetPosition(new Vector2(255, 255));
+            mole.SetPosition(center);
             Texture2D grass = Content.Load<Texture2D>("grass");
             map = new Map(1000, 1000, 1, Content.Load<Texture2D>("grass"), Content.Load<Texture2D>("grass"), Content.Load<Texture2D>("grass"), Content.Load<Texture2D>("grass"));
             map.setViewRadius(20);
@@ -148,17 +152,24 @@ _graphics.PreferredBackBufferHeight / 2));
             // TODO: Add your drawing code here
             _spriteBatch.Begin(blendState: BlendState.AlphaBlend);
 
-            map.Draw(_spriteBatch, mole.GetPosition(), mole.Underground, mole);
+            map.Draw(_spriteBatch, mole.GetPosition(), mole.Underground, center, mole);
             foreach (var worm in earthworms)
             {
-                worm.Draw(_spriteBatch, mole.GetPosition(), mole.Underground);
+                worm.Draw(_spriteBatch, mole.GetPosition(), mole.Underground, center);
             }
             foreach (var valuable in collectibles)
             {
-                valuable.Draw(_spriteBatch, mole.GetPosition(), mole.Underground);
+                valuable.Draw(_spriteBatch, mole.GetPosition(), mole.Underground, center);
             }
-            man.Draw(_spriteBatch, mole.GetPosition(), mole.Underground);
+            man.Draw(_spriteBatch, mole.GetPosition(), mole.Underground, center);
+
+            spriteFont = Content.Load<SpriteFont>("File");
+
+            _spriteBatch.DrawString(spriteFont, "Score: " + mole.GetScore(), new Vector2(_graphics.PreferredBackBufferWidth / 2 - 50, 20), Color.Black);
+
             _spriteBatch.End();
+
+
 
             base.Draw(gameTime);
         }

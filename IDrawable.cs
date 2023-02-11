@@ -10,6 +10,6 @@ namespace Mole_on_Parole
 {
     public interface IDrawable
     {
-        public void Draw(SpriteBatch spriteBatch, Vector2 cameraPosition, bool underground);
+        public void Draw(SpriteBatch spriteBatch, Vector2 cameraPosition, bool underground, Vector2 center);
     }
 }
