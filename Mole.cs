@@ -24,6 +24,7 @@ namespace Mole_on_Parole
         private float _acceleration;
         private float _maxSpeed;
         private Texture2D _texture;
+        public bool Underground { get; set; }
 
         public Mole(Texture2D moleTexture)
         {
@@ -31,6 +32,7 @@ namespace Mole_on_Parole
             _texture = moleTexture;
             _velocity = new Vector2(0, 0);
             _baseAcceleration = 2 * _baseMaxSpeed;
+            Underground = true;
         }
 
         public bool _HasAttachedValuable()
@@ -48,7 +50,7 @@ namespace Mole_on_Parole
             _position = position;
         }
 
-        public void Draw(SpriteBatch spriteBatch, Vector2 position)
+        public void Draw(SpriteBatch spriteBatch, Vector2 position, bool underground)
         {
             Vector2 pos = Vector2.Add(Vector2.Negate(position), _position);
             pos += new Vector2(255, 255);
@@ -56,7 +58,7 @@ namespace Mole_on_Parole
         }
 
 
-        public void Update(double totalSeconds)
+        public void Update(double totalSeconds, Vector2 position)
         {
             _acceleration = _baseAcceleration / ((_attachedValuable != null) ? _attachedValuable.GetWeight() : 1);
             _maxSpeed = _baseMaxSpeed / ((_attachedValuable != null) ? _attachedValuable.GetWeight() : 1);

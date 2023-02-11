@@ -31,7 +31,7 @@ namespace Mole_on_Parole
         }
 
 
-        public void Draw(SpriteBatch spriteBatch, Vector2 position)
+        public void Draw(SpriteBatch spriteBatch, Vector2 position, bool underground)
         {
             Vector2 pos = Vector2.Add(Vector2.Negate(position), _position);
             pos += new Vector2(255, 255);
@@ -49,17 +49,12 @@ namespace Mole_on_Parole
 
         }
 
-        public void UpdatePos(double totalSeconds, Vector2 molePosition)
+        public void Update(double totalSeconds, Vector2 molePosition)
         {
             _direction = (molePosition - _position);
             _direction.Normalize();
             _velocity = _direction * _baseMaxSpeed;
             _position += _velocity * (float) totalSeconds;
-        }
-
-        public void Update(double totalSeconds)
-        {
-            throw new NotImplementedException();
         }
 
         public void DetectAndKillMole(double totalSeconds, Mole mole)

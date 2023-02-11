@@ -41,7 +41,7 @@ namespace Mole_on_Parole
             _position = molePosition + new Vector2(-35, 0);
         }
 
-        public void Draw(SpriteBatch spriteBatch, Vector2 position)
+        public void Draw(SpriteBatch spriteBatch, Vector2 position, bool underground)
         {
             Vector2 scale = new Vector2(0.2f, 0.2f); //80% smaller
             Vector2 pos = Vector2.Add(Vector2.Negate(position), _position);
@@ -65,7 +65,7 @@ namespace Mole_on_Parole
             return _weight;
         }
 
-        public void Update(double totalSeconds)
+        public void Update(double totalSeconds, Vector2 position)
         {
             throw new NotImplementedException();
         }
