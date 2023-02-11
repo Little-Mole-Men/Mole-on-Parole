@@ -8,10 +8,15 @@ namespace Mole_on_Parole
     public class Game1 : Game
     {
         Mole mole;
+<<<<<<< HEAD
         Map map;
+=======
+        Man man;
+>>>>>>> master
         List<ICollectible> collectibles;
         Grid grid;
         Texture2D moleTexture;
+        Texture2D manTexture;
 
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
@@ -27,10 +32,16 @@ namespace Mole_on_Parole
         {
             // TODO: Add your initialization logic here
             moleTexture = Content.Load<Texture2D>("ball");
+            manTexture = Content.Load<Texture2D>("ball");
             mole = new Mole(moleTexture);
+<<<<<<< HEAD
             mole.SetPosition(new Vector2(255, 255));
             map = new Map(1000, 1000, 1, Content.Load<Texture2D>("grass"), Content.Load<Texture2D>("grass"));
             map.setViewRadius(10);
+=======
+            man = new Man(manTexture, new Vector2(_graphics.PreferredBackBufferWidth / 2,
+_graphics.PreferredBackBufferHeight / 2));
+>>>>>>> master
             base.Initialize();
         }
 
@@ -76,6 +87,8 @@ namespace Mole_on_Parole
             }
 
             mole.Update(gameTime.ElapsedGameTime.TotalSeconds);
+            man.UpdatePos(gameTime.ElapsedGameTime.TotalSeconds, mole.getPosition());
+            man.DetectAndKillMole(gameTime.ElapsedGameTime.TotalSeconds, mole);
             base.Update(gameTime);
         }
 
@@ -85,8 +98,13 @@ namespace Mole_on_Parole
 
             // TODO: Add your drawing code here
             _spriteBatch.Begin();
+<<<<<<< HEAD
             map.Draw(_spriteBatch, mole.GetPosition());
             mole.Draw(_spriteBatch, mole.GetPosition());
+=======
+            mole.Draw(_spriteBatch);
+            man.Draw(_spriteBatch);
+>>>>>>> master
             _spriteBatch.End();
 
             base.Draw(gameTime);

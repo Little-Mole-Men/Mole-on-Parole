@@ -32,6 +32,7 @@ namespace Mole_on_Parole
             _baseAcceleration = 2 * _baseMaxSpeed;
         }
 
+<<<<<<< HEAD
         public Vector2 GetPosition()
         {
             return _position;
@@ -46,6 +47,16 @@ namespace Mole_on_Parole
             Vector2 pos = Vector2.Add(Vector2.Negate(position), _position);
             pos += new Vector2(255,255);
             spriteBatch.Draw(_texture, pos, null, Color.Brown, 0f, 
+=======
+        public Vector2 getPosition()
+        {
+            return _position;
+        }
+
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            spriteBatch.Draw(_texture, _position, null, Color.White, 0f, 
+>>>>>>> master
                 new Vector2(_texture.Width / 2, _texture.Height / 2), Vector2.One, SpriteEffects.None, 0f);
         }
 
@@ -102,6 +113,17 @@ namespace Mole_on_Parole
                     }
                     break;
             }
+        }
+
+        public void GetKilled()
+        {
+            if (_lives != 0)
+            {
+                _lives--;
+                Console.WriteLine("MOLE HAS BEEN KILLED ");
+                Console.WriteLine(_lives);
+            };
+            
         }
     }
 }
