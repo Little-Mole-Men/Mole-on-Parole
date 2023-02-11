@@ -118,7 +118,9 @@ _graphics.PreferredBackBufferHeight / 2));
 
             // TODO: Add your drawing code here
             _spriteBatch.Begin();
-            foreach (var warm in earthworms)
+
+            map.Draw(_spriteBatch, mole.GetPosition());
+            foreach (var worm in earthworms)
             {
                 worm.Draw(_spriteBatch, mole.GetPosition());
             }
@@ -126,8 +128,6 @@ _graphics.PreferredBackBufferHeight / 2));
             {
                 valuable.Draw(_spriteBatch, mole.GetPosition());
             }
-
-            map.Draw(_spriteBatch, mole.GetPosition());
             mole.Draw(_spriteBatch, mole.GetPosition());
             man.Draw(_spriteBatch, mole.GetPosition());
             _spriteBatch.End();

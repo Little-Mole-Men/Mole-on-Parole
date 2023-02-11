@@ -44,10 +44,12 @@ namespace Mole_on_Parole
         public void Draw(SpriteBatch spriteBatch, Vector2 position)
         {
             Vector2 scale = new Vector2(0.2f, 0.2f); //80% smaller
+            Vector2 pos = Vector2.Add(Vector2.Negate(position), _position);
+            pos += new Vector2(255, 255);
 
             spriteBatch.Draw(
                 _texture,
-                _position,
+                pos,
                 null,
                 Color.White,
                 0f,
