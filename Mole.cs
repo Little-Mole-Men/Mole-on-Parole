@@ -115,5 +115,10 @@ namespace Mole_on_Parole
             _digSpaces += value;
             Console.WriteLine("Dig spaces up by 2");
         }
+
+        public void SetAttachedValuable(GenericValuable valuable)
+        {
+            _attachedValuable = valuable;
+        }
     }
 }

@@ -12,12 +12,13 @@ namespace Mole_on_Parole
         Man man;
         Earthworm worm;
         List<Earthworm> earthworms = new List<Earthworm>();
-        List<Earthworm> deletedworms = new List<Earthworm>();
-        List<ICollectible> collectibles;
+        GenericValuable valuable;
+        List<GenericValuable> collectibles = new List<GenericValuable>();
         Grid grid;
         Texture2D moleTexture;
         Texture2D manTexture;
         Texture2D wormTexture;
+        Texture2D valuableTexture;
 
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
@@ -35,6 +36,7 @@ namespace Mole_on_Parole
             moleTexture = Content.Load<Texture2D>("ball");
             manTexture = Content.Load<Texture2D>("ball");
             wormTexture = Content.Load<Texture2D>("ball");
+            valuableTexture = Content.Load<Texture2D>("ball");
 
 
             mole = new Mole(moleTexture);
@@ -43,6 +45,9 @@ _graphics.PreferredBackBufferHeight / 2));
             
             worm = new Earthworm(wormTexture, new Vector2(100, 100));
             earthworms.Add(worm);
+
+            valuable = new GenericValuable(valuableTexture, new Vector2(300, 300), 2, 10);
+            collectibles.Add(valuable);
             base.Initialize();
         }
 
@@ -91,6 +96,14 @@ _graphics.PreferredBackBufferHeight / 2));
             man.UpdatePos(gameTime.ElapsedGameTime.TotalSeconds, mole.getPosition());
             man.DetectAndKillMole(gameTime.ElapsedGameTime.TotalSeconds, mole);
             earthworms.RemoveAll(elem => elem.DetectMoleClose(mole) == true);
+            foreach (var valuable in collectibles)
+            {
+                valuable.DetectMoleClose(mole);
+                if (valuable.getAttached())
+                {
+                    valuable.SetPosition(mole.getPosition());
+                }
+            }
                 
             base.Update(gameTime);
         }
@@ -106,6 +119,10 @@ _graphics.PreferredBackBufferHeight / 2));
             foreach (var warm in earthworms)
             {
                 worm.Draw(_spriteBatch);
+            }
+            foreach (var valuable in collectibles)
+            {
+                valuable.Draw(_spriteBatch);
             }
 
             _spriteBatch.End();
