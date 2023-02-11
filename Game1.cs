@@ -24,6 +24,8 @@ namespace Mole_on_Parole
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
+        SpriteFont spriteFont;
+
         private int numWorms = 1000;
         private int numValuables = 20;
 
@@ -147,7 +149,14 @@ _graphics.PreferredBackBufferHeight / 2));
             }
             mole.Draw(_spriteBatch, mole.GetPosition());
             man.Draw(_spriteBatch, mole.GetPosition());
+
+            spriteFont = Content.Load<SpriteFont>("File");
+
+            _spriteBatch.DrawString(spriteFont, "Score: " + mole.GetScore(), new Vector2(_graphics.PreferredBackBufferWidth / 2 - 50, 20), Color.Black);
+
             _spriteBatch.End();
+
+
 
             base.Draw(gameTime);
         }
