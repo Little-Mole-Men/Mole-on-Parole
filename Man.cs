@@ -11,9 +11,7 @@ namespace Mole_on_Parole
 {
     public class Man : IUpdatable, IDrawable
     {
-<<<<<<< HEAD
-        public void Draw(SpriteBatch spriteBatch, Microsoft.Xna.Framework.Vector2 position)
-=======
+
         private ICollectible _attachedCollectible = null;
         private Vector2 _velocity;
         private Vector2 _position;
@@ -34,13 +32,13 @@ namespace Mole_on_Parole
         }
 
 
-        public void Draw(SpriteBatch spriteBatch)
->>>>>>> master
+        public void Draw(SpriteBatch spriteBatch, Vector2 position)
         {
-
+            Vector2 pos = Vector2.Add(Vector2.Negate(position), _position);
+            pos += new Vector2(255, 255);
             spriteBatch.Draw(
                 _texture,
-                _position,
+                pos,
                 null,
                 Color.White,
                 0f,
@@ -67,7 +65,7 @@ namespace Mole_on_Parole
 
         public void DetectAndKillMole(double totalSeconds, Mole mole)
         {
-            if (Vector2.Distance(_position, mole.getPosition()) <= _killRange)
+            if (Vector2.Distance(_position, mole.GetPosition()) <= _killRange)
             {
                 mole.GetKilled();
             }

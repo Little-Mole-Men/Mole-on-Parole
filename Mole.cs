@@ -32,7 +32,6 @@ namespace Mole_on_Parole
             _baseAcceleration = 2 * _baseMaxSpeed;
         }
 
-<<<<<<< HEAD
         public Vector2 GetPosition()
         {
             return _position;
@@ -45,20 +44,10 @@ namespace Mole_on_Parole
         public void Draw(SpriteBatch spriteBatch, Vector2 position)
         {
             Vector2 pos = Vector2.Add(Vector2.Negate(position), _position);
-            pos += new Vector2(255,255);
-            spriteBatch.Draw(_texture, pos, null, Color.Brown, 0f, 
-=======
-        public Vector2 getPosition()
-        {
-            return _position;
+            pos += new Vector2(255, 255);
+            spriteBatch.Draw(_texture, pos, null, Color.Brown, 0f, new Vector2(_texture.Width / 2, _texture.Height / 2), Vector2.One, SpriteEffects.None, 0f); 
         }
 
-        public void Draw(SpriteBatch spriteBatch)
-        {
-            spriteBatch.Draw(_texture, _position, null, Color.White, 0f, 
->>>>>>> master
-                new Vector2(_texture.Width / 2, _texture.Height / 2), Vector2.One, SpriteEffects.None, 0f);
-        }
 
         public void Update(double totalSeconds)
         {
