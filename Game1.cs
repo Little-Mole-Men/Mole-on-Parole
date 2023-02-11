@@ -24,6 +24,8 @@ namespace Mole_on_Parole
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
+        SpriteFont spriteFont;
+
         private int numWorms = 1000;
         private int numValuables = 20;
 
@@ -37,7 +39,7 @@ namespace Mole_on_Parole
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            moleTexture = Content.Load<Texture2D>("ball");
+            moleTexture = Content.Load<Texture2D>("molesheet");
             manTexture = Content.Load<Texture2D>("ball");
             wormTexture = Content.Load<Texture2D>("ball");
             valuableTexture = Content.Load<Texture2D>("ball");
@@ -147,7 +149,14 @@ _graphics.PreferredBackBufferHeight / 2));
             }
             mole.Draw(_spriteBatch, mole.GetPosition());
             man.Draw(_spriteBatch, mole.GetPosition());
+
+            spriteFont = Content.Load<SpriteFont>("File");
+
+            _spriteBatch.DrawString(spriteFont, "Score: " + mole.GetScore(), new Vector2(_graphics.PreferredBackBufferWidth / 2 - 50, 20), Color.Black);
+
             _spriteBatch.End();
+
+
 
             base.Draw(gameTime);
         }
