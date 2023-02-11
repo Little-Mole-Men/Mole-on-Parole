@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Mole_on_Parole
@@ -9,10 +10,14 @@ namespace Mole_on_Parole
     {
         Mole mole;
         Man man;
+        Earthworm worm;
+        List<Earthworm> earthworms = new List<Earthworm>();
+        List<Earthworm> deletedworms = new List<Earthworm>();
         List<ICollectible> collectibles;
         Grid grid;
         Texture2D moleTexture;
         Texture2D manTexture;
+        Texture2D wormTexture;
 
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
@@ -29,9 +34,15 @@ namespace Mole_on_Parole
             // TODO: Add your initialization logic here
             moleTexture = Content.Load<Texture2D>("ball");
             manTexture = Content.Load<Texture2D>("ball");
+            wormTexture = Content.Load<Texture2D>("ball");
+
+
             mole = new Mole(moleTexture);
             man = new Man(manTexture, new Vector2(_graphics.PreferredBackBufferWidth / 2,
 _graphics.PreferredBackBufferHeight / 2));
+            
+            worm = new Earthworm(wormTexture, new Vector2(100, 100));
+            earthworms.Add(worm);
             base.Initialize();
         }
 
@@ -79,6 +90,8 @@ _graphics.PreferredBackBufferHeight / 2));
             mole.Update(gameTime.ElapsedGameTime.TotalSeconds);
             man.UpdatePos(gameTime.ElapsedGameTime.TotalSeconds, mole.getPosition());
             man.DetectAndKillMole(gameTime.ElapsedGameTime.TotalSeconds, mole);
+            earthworms.RemoveAll(elem => elem.DetectMoleClose(mole) == true);
+                
             base.Update(gameTime);
         }
 
@@ -90,6 +103,11 @@ _graphics.PreferredBackBufferHeight / 2));
             _spriteBatch.Begin();
             mole.Draw(_spriteBatch);
             man.Draw(_spriteBatch);
+            foreach (var warm in earthworms)
+            {
+                worm.Draw(_spriteBatch);
+            }
+
             _spriteBatch.End();
 
             base.Draw(gameTime);
