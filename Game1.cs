@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 namespace Mole_on_Parole
 {
@@ -11,9 +12,8 @@ namespace Mole_on_Parole
         Mole mole;
         Map map;
         Man man;
-        Earthworm worm;
+        
         List<Earthworm> earthworms = new List<Earthworm>();
-        GenericValuable valuable;
         List<GenericValuable> collectibles = new List<GenericValuable>();
         Grid grid;
         Texture2D moleTexture;
@@ -23,6 +23,9 @@ namespace Mole_on_Parole
 
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+
+        private int numWorms = 1000;
+        private int numValuables = 20;
 
         public Game1()
         {
@@ -46,12 +49,26 @@ namespace Mole_on_Parole
             map.setViewRadius(20);
             man = new Man(manTexture, new Vector2(_graphics.PreferredBackBufferWidth / 2,
 _graphics.PreferredBackBufferHeight / 2));
-            
-            worm = new Earthworm(wormTexture, new Vector2(100, 100));
-            earthworms.Add(worm);
 
-            valuable = new GenericValuable(valuableTexture, new Vector2(300, 300), 2, 10);
-            collectibles.Add(valuable);
+            Random rd = new Random();
+
+   
+
+            for (var i=0; i<numWorms; i++)
+            {
+                Earthworm worm;
+                worm = new Earthworm(wormTexture, new Vector2(rd.Next(0,32000), rd.Next(0, 32000)));
+                earthworms.Add(worm);
+
+            }
+
+            for (var i = 0; i < numWorms; i++)
+            {
+                GenericValuable valuable;
+                valuable = new GenericValuable(valuableTexture, new Vector2(rd.Next(0, 32000), rd.Next(0, 32000)), 2, 10);
+                collectibles.Add(valuable);
+
+            }
             base.Initialize();
         }
 

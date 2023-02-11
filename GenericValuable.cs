@@ -72,7 +72,7 @@ namespace Mole_on_Parole
 
         public void DetectMoleClose(Mole mole)
         {
-            if (Vector2.Distance(_position, mole.GetPosition()) <= eatRange)
+            if ((Vector2.Distance(_position, mole.GetPosition()) <= eatRange) && !mole._HasAttachedValuable())
             {
                 mole.SetAttachedValuable(this);
                 Console.WriteLine("Mole picked up valuable");

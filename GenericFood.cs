@@ -17,7 +17,7 @@ namespace Mole_on_Parole
         private Vector2 _position;
         private Texture2D _texture;
 
-        private int eatRange = 10;
+        private int eatRange = 30;
 
         private const int value = 2;
 

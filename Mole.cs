@@ -33,6 +33,11 @@ namespace Mole_on_Parole
             _baseAcceleration = 2 * _baseMaxSpeed;
         }
 
+        public bool _HasAttachedValuable()
+        {
+            return _attachedValuable != null;
+        }
+
         public Vector2 GetPosition()
         {
             return _position;
