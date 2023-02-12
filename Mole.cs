@@ -136,7 +136,7 @@ namespace Mole_on_Parole
             _acceleration = _baseAcceleration / ((_attachedValuable != null) ? _attachedValuable.GetWeight() : 1);
             _deceleration = _baseAcceleration * ((_attachedValuable != null) ? _attachedValuable.GetWeight() : 1);
             _maxSpeed = _baseMaxSpeed / ((_attachedValuable != null) ? _attachedValuable.GetWeight() : 1);
-            if (_digging && _digTime > 0.5)
+            if (_digging && _digTime > 0.5 && _digSpaces > 0) 
             {
                 switch (_digDirection)
                 {
@@ -153,6 +153,7 @@ namespace Mole_on_Parole
                         (_surroundings[2, 1]).Dig();
                         break;
                 }
+                _digSpaces--;
                 _digging = false;
                 _digTime = 0;
             }
@@ -320,12 +321,21 @@ namespace Mole_on_Parole
         public void EatWorm(int value)
         {
             _digSpaces += value;
-            Console.WriteLine("Dig spaces up by 2");
         }
 
         public void SetAttachedValuable(GenericValuable valuable)
         {
             _attachedValuable = valuable;
+        }
+
+        public void LoseDigSpace()
+        {
+            _digSpaces--;
+        }
+
+        public int GetDigSpaces()
+        {
+            return _digSpaces;
         }
 
         public IValuable GetAttachedValuable()

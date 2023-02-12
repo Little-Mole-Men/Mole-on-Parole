@@ -54,7 +54,7 @@ namespace Mole_on_Parole
             center = new Vector2(_graphics.PreferredBackBufferWidth / 2, _graphics.PreferredBackBufferHeight / 2);
 
             mole = new Mole(moleTexture);
-            mole.SetPosition(center);
+            mole.SetPosition(new Vector2(500, 500) * 32);
             Texture2D grass = Content.Load<Texture2D>("grass");
             map = new Map(1000, 1000, 1, Content.Load<Texture2D>("grass"), Content.Load<Texture2D>("grass"), Content.Load<Texture2D>("grass"), Content.Load<Texture2D>("grass"));
             map.setViewRadius(20);
@@ -132,11 +132,16 @@ namespace Mole_on_Parole
 
                 if(!mole.HasAttachedValuable() && map.IsClosestGrass(mole.GetPosition()))
                 {
-                    if (!map.IsClosestDug(mole.GetPosition()))
+                    if (!map.IsClosestDug(mole.GetPosition()) && mole.GetDigSpaces() > 0)
                     {
                         map.DigHole(mole.GetPosition());
+                        mole.LoseDigSpace();
+                        mole.Underground = !mole.Underground;
                     }
-                    mole.Underground = !mole.Underground;
+                    else if (map.IsClosestDug(mole.GetPosition()))
+                    {
+                        mole.Underground = !mole.Underground;
+                    }
                 }
             }
             mole.setSurroundings(map.GetSurroundings(mole.GetPosition()));
@@ -144,13 +149,13 @@ namespace Mole_on_Parole
             map.Update(gameTime.ElapsedGameTime.TotalSeconds, mole.GetPosition());
             if (!mole.Underground)
             {
-                man.SetVision(true);
-                if (map.IsClosestDug(mole.GetPosition()) && mole.HasAttachedValuable())
+                if(map.IsClosestDug(mole.GetPosition()) && mole.HasAttachedValuable())
                 {
                     collectibles.Remove(mole.GetAttachedValuable());
                     mole.SetAttachedValuable(null);
                 }
                 man.DetectAndKillMole(gameTime.ElapsedGameTime.TotalSeconds, mole);
+                man.Update(gameTime.ElapsedGameTime.TotalSeconds, mole.GetPosition());
                 earthworms.RemoveAll(elem => elem.DetectMoleClose(mole) == true);
                 foreach (var valuable in collectibles)
                 {
@@ -161,12 +166,6 @@ namespace Mole_on_Parole
                     mole.GetAttachedValuable().SetPosition(mole.GetPosition());
                 }
             }
-            else
-            {
-                man.SetVision(false);
-            }
-            man.Update(gameTime.ElapsedGameTime.TotalSeconds, mole.GetPosition());
-
             base.Update(gameTime);
         }
 
