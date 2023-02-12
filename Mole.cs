@@ -22,6 +22,7 @@ namespace Mole_on_Parole
         private float _baseMaxSpeed = 200;
         private float _baseAcceleration;
         private float _acceleration;
+        private float _deceleration;
         private float _maxSpeed;
         private Texture2D _texture;
         private int _score;
@@ -37,7 +38,7 @@ namespace Mole_on_Parole
             _score = 0;
         }
 
-        public bool _HasAttachedValuable()
+        public bool HasAttachedValuable()
         {
             return _attachedValuable != null;
         }
@@ -63,6 +64,7 @@ namespace Mole_on_Parole
         public void Update(double totalSeconds, Vector2 position)
         {
             _acceleration = _baseAcceleration / ((_attachedValuable != null) ? _attachedValuable.GetWeight() : 1);
+            _deceleration = _baseAcceleration * ((_attachedValuable != null) ? _attachedValuable.GetWeight() : 1);
             _maxSpeed = _baseMaxSpeed / ((_attachedValuable != null) ? _attachedValuable.GetWeight() : 1);
             _position += _velocity * (float)totalSeconds;
         }
@@ -84,6 +86,11 @@ namespace Mole_on_Parole
                     _velocity.X = Math.Min((_velocity.X + _acceleration * totalSeconds), _maxSpeed);
                     break;
             }
+            if (_velocity.LengthSquared() > Math.Pow(_maxSpeed, 2))
+            {
+                _velocity.Normalize();
+                _velocity *= _maxSpeed;
+            }
         }
 
         public void Slow(Directions direction, float totalSeconds)
@@ -92,9 +99,9 @@ namespace Mole_on_Parole
             {
                 case Directions.UP:
                 case Directions.DOWN:
-                    if (Math.Abs(_velocity.Y) >= Math.Abs(_acceleration * totalSeconds))
+                    if (Math.Abs(_velocity.Y) >= Math.Abs(_deceleration * totalSeconds))
                     {
-                        _velocity.Y = (_velocity.Y - (Math.Sign(_velocity.Y) * _acceleration * totalSeconds));
+                        _velocity.Y = (_velocity.Y - (Math.Sign(_velocity.Y) * _deceleration * totalSeconds));
                     }
                     else
                     {
@@ -103,9 +110,9 @@ namespace Mole_on_Parole
                     break;
                 case Directions.LEFT:
                 case Directions.RIGHT:
-                    if (Math.Abs(_velocity.X) >= Math.Abs(_acceleration * totalSeconds))
+                    if (Math.Abs(_velocity.X) >= Math.Abs(_deceleration * totalSeconds))
                     {
-                        _velocity.X = (_velocity.X - (Math.Sign(_velocity.X) * _acceleration * totalSeconds));
+                        _velocity.X = (_velocity.X - (Math.Sign(_velocity.X) * _deceleration * totalSeconds));
                     }
                     else
                     {
@@ -135,6 +142,11 @@ namespace Mole_on_Parole
         public void SetAttachedValuable(GenericValuable valuable)
         {
             _attachedValuable = valuable;
+        }
+
+        public IValuable GetAttachedValuable()
+        {
+            return this._attachedValuable;
         }
 
         public int GetScore()

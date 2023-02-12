@@ -31,7 +31,7 @@ namespace Mole_on_Parole
             _attached = false;
         }
 
-        public bool getAttached()
+        public bool GetAttached()
         {
             return _attached;
         }
@@ -70,17 +70,17 @@ namespace Mole_on_Parole
             throw new NotImplementedException();
         }
 
-        public void DetectMoleClose(Mole mole)
+        public bool DetectMoleClose(Mole mole)
         {
-            if ((Vector2.Distance(_position, mole.GetPosition()) <= eatRange) && !mole._HasAttachedValuable())
+            if ((Vector2.Distance(_position, mole.GetPosition()) <= eatRange) && !mole.HasAttachedValuable())
             {
                 mole.SetAttachedValuable(this);
                 Console.WriteLine("Mole picked up valuable");
                 _attached = true;
                 mole.IncreaseScore(_value);
-                
+                return true;
             }
-            
+            return false;
         }
     }
 }
