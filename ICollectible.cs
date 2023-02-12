@@ -9,6 +9,6 @@ namespace Mole_on_Parole
     public interface ICollectible : IDrawable, IUpdatable
     { 
         string Name { get; }
-     
+        public bool DetectMoleClose(Mole mole);
     }
 }
