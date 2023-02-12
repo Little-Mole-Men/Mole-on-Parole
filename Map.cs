@@ -72,6 +72,7 @@ namespace Mole_on_Parole
             }
             _Overworld[500, 500] = new Grass(new Vector2(500 * 32, 500 * 32), Color.Green, _grassTexture);
             _Overworld[500, 500].Dig();
+            _Underworld[500, 500] = new UndergroundDug(new Vector2(500 * 32, 500 * 32), Color.Gray, _undergroundDugTexture);
         }
 
         public void setViewRadius(int r)
