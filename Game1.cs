@@ -145,13 +145,13 @@ namespace Mole_on_Parole
             map.Update(gameTime.ElapsedGameTime.TotalSeconds, mole.GetPosition());
             if (!mole.Underground)
             {
-                if(map.IsClosestDug(mole.GetPosition()) && mole.HasAttachedValuable())
+                man.SetVision(true);
+                if (map.IsClosestDug(mole.GetPosition()) && mole.HasAttachedValuable())
                 {
                     collectibles.Remove(mole.GetAttachedValuable());
                     mole.SetAttachedValuable(null);
                 }
                 man.DetectAndKillMole(gameTime.ElapsedGameTime.TotalSeconds, mole);
-                man.Update(gameTime.ElapsedGameTime.TotalSeconds, mole.GetPosition());
                 earthworms.RemoveAll(elem => elem.DetectMoleClose(mole) == true);
                 foreach (var valuable in collectibles)
                 {
@@ -162,6 +162,12 @@ namespace Mole_on_Parole
                     }
                 }
             }
+            else
+            {
+                man.SetVision(false);
+            }
+            man.Update(gameTime.ElapsedGameTime.TotalSeconds, mole.GetPosition());
+
             base.Update(gameTime);
         }
 
