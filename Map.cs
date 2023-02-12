@@ -4,6 +4,7 @@ using Project2;
 using System;
 using System.Collections.Generic;
 using System.Reflection.Metadata;
+using System.Runtime.ExceptionServices;
 
 namespace Mole_on_Parole
 {
@@ -117,6 +118,10 @@ namespace Mole_on_Parole
                         if ((int)a >= 0 && (int)b >= 0)
                         {
                             coordsToDraw.Add(new Tuple<int, int>((int)a, (int)b));
+                            if (_Underworld[(int)a,(int)b] is UndergroundNotDug && (_Underworld[(int)a,(int)b] as UndergroundNotDug).Dug)
+                            {
+                                _Underworld[(int)a,(int)b] = new UndergroundDug(new Vector2(a * 32, b * 32), Color.Gray, _undergroundDugTexture);
+                            }
                         }
                     }
                 }
@@ -134,6 +139,25 @@ namespace Mole_on_Parole
             return ((position.X > 0 && position.Y > 0) &&
                 (_Overworld[((int)(position.X) / 32), ((int)(position.Y) / 32)] is Grass) &&
                 ((_Overworld[((int)(position.X) / 32), ((int)(position.Y) / 32)]) as Grass).isDug());
+        }
+
+        public GridItem[,] GetSurroundings(Vector2 position)
+        {
+            GridItem[,] surroundings = new GridItem[3, 3];
+            int midX = (int)(position.X / 32) - 1;
+            int midY = (int)(position.Y / 32) - 1;
+            for(int i = 0; i < 3; i++)
+            {
+                for(int j = 0; j < 3; j++)
+                {
+                    if (midX + i < 0 || midY + j < 0)
+                    {
+                        surroundings[i, j] = null;
+                    }
+                    else surroundings[i, j] = _Underworld[midX + i, midY + j];
+                }
+            }
+            return surroundings;
         }
 
         internal void DigHole(Vector2 position)
