@@ -184,7 +184,8 @@ namespace Mole_on_Parole
 
             spriteFont = Content.Load<SpriteFont>("File");
 
-            _spriteBatch.DrawString(spriteFont, "Score: " + mole.GetScore(), new Vector2(_graphics.PreferredBackBufferWidth / 2 - 50, 20), Color.Black);
+            _spriteBatch.DrawString(spriteFont, "Score: " + mole.GetScore(), new Vector2(20, 20), Color.White);
+            _spriteBatch.DrawString(spriteFont, "Lives Left: " + mole.GetLives(), new Vector2(1250, 20), Color.White);
 
             _spriteBatch.End();
 
