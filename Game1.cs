@@ -222,7 +222,7 @@ namespace Mole_on_Parole
             _spriteBatch.DrawString(spriteFont, "Man Distance Away: " + Convert.ToInt32((Vector2.Distance(men[closestManIndex].GetPosition(), mole.GetPosition()))/32), new Vector2(20, 180), Color.White);
             if (mole.GetLives() == 0)
             {
-                _spriteBatch.DrawString(spriteFont, "GAME OVER", center, Color.White);
+                _spriteBatch.DrawString(spriteFont, "GAME OVER", center - new Vector2(150,0), Color.White);
             }
             _spriteBatch.End();
 
