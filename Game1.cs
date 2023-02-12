@@ -13,8 +13,8 @@ namespace Mole_on_Parole
         Map map;
         Man man;
         
-        List<Earthworm> earthworms = new List<Earthworm>();
-        List<GenericValuable> collectibles = new List<GenericValuable>();
+        List<IFood> earthworms = new List<IFood>();
+        List<IValuable> collectibles = new List<IValuable>();
         Grid grid;
         Texture2D moleTexture;
         Texture2D manTexture;
@@ -46,6 +46,12 @@ namespace Mole_on_Parole
             wormTexture = Content.Load<Texture2D>("ball");
             valuableTexture = Content.Load<Texture2D>("ball");
 
+            _graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+            _graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+            _graphics.HardwareModeSwitch = true;
+            _graphics.IsFullScreen = true;
+            _graphics.ApplyChanges();
+
             center = new Vector2(_graphics.PreferredBackBufferWidth / 2, _graphics.PreferredBackBufferHeight / 2);
 
             mole = new Mole(moleTexture);
@@ -53,8 +59,7 @@ namespace Mole_on_Parole
             Texture2D grass = Content.Load<Texture2D>("grass");
             map = new Map(1000, 1000, 1, Content.Load<Texture2D>("grass"), Content.Load<Texture2D>("grass"), Content.Load<Texture2D>("grass"), Content.Load<Texture2D>("grass"));
             map.setViewRadius(20);
-            man = new Man(manTexture, new Vector2(_graphics.PreferredBackBufferWidth / 2,
-_graphics.PreferredBackBufferHeight / 2));
+            man = new Man(manTexture, center);
 
             Random rd = new Random();
 
@@ -101,7 +106,7 @@ _graphics.PreferredBackBufferHeight / 2));
             {
                 mole.Accelerate(Directions.DOWN, (float)gameTime.ElapsedGameTime.TotalSeconds);
             }
-            if (!kState.IsKeyDown(Keys.W) && !kState.IsKeyDown(Keys.S))
+            if (kState.IsKeyDown(Keys.W) == kState.IsKeyDown(Keys.S))
             {
                 mole.Slow(Directions.UP, (float)gameTime.ElapsedGameTime.TotalSeconds);
             }
@@ -114,7 +119,7 @@ _graphics.PreferredBackBufferHeight / 2));
             {
                 mole.Accelerate(Directions.RIGHT, (float)gameTime.ElapsedGameTime.TotalSeconds);
             }
-            if(!kState.IsKeyDown(Keys.A) && !kState.IsKeyDown(Keys.D))
+            if(kState.IsKeyDown(Keys.A) == kState.IsKeyDown(Keys.D))
             {
                 mole.Slow(Directions.RIGHT, (float)gameTime.ElapsedGameTime.TotalSeconds);
             }
@@ -125,29 +130,44 @@ _graphics.PreferredBackBufferHeight / 2));
             if(kState.IsKeyUp(Keys.Q) && qDown)
             {
                 qDown = false;
-                mole.Underground = !mole.Underground;
+
+                if(!mole.HasAttachedValuable() && map.IsClosestGrass(mole.GetPosition()))
+                {
+                    if (!map.IsClosestDug(mole.GetPosition()))
+                    {
+                        map.DigHole(mole.GetPosition());
+                    }
+                    mole.Underground = !mole.Underground;
+                }
             }
 
             mole.Update(gameTime.ElapsedGameTime.TotalSeconds, mole.GetPosition());
-            man.Update(gameTime.ElapsedGameTime.TotalSeconds, mole.GetPosition());
             map.Update(gameTime.ElapsedGameTime.TotalSeconds, mole.GetPosition());
-            man.DetectAndKillMole(gameTime.ElapsedGameTime.TotalSeconds, mole);
-            earthworms.RemoveAll(elem => elem.DetectMoleClose(mole) == true);
-            foreach (var valuable in collectibles)
+            if (!mole.Underground)
             {
-                valuable.DetectMoleClose(mole);
-                if (valuable.getAttached())
+                if(map.IsClosestDug(mole.GetPosition()) && mole.HasAttachedValuable())
                 {
-                    valuable.SetPosition(mole.GetPosition());
+                    collectibles.Remove(mole.GetAttachedValuable());
+                    mole.SetAttachedValuable(null);
+                }
+                man.DetectAndKillMole(gameTime.ElapsedGameTime.TotalSeconds, mole);
+                man.Update(gameTime.ElapsedGameTime.TotalSeconds, mole.GetPosition());
+                earthworms.RemoveAll(elem => elem.DetectMoleClose(mole) == true);
+                foreach (var valuable in collectibles)
+                {
+                    valuable.DetectMoleClose(mole);
+                    if (valuable.GetAttached())
+                    {
+                        valuable.SetPosition(mole.GetPosition());
+                    }
                 }
             }
-                
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.White);
+            GraphicsDevice.Clear(Color.Black);
 
             // TODO: Add your drawing code here
             _spriteBatch.Begin(blendState: BlendState.AlphaBlend);

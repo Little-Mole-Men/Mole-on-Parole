@@ -31,7 +31,7 @@ namespace Mole_on_Parole
 
         public Map(int sizeX, int sizeY, int seed, Texture2D grass, Texture2D concrete, Texture2D undergroundDug, Texture2D undergroundNotDug)
         {
-            _Overworld = new GridItem[sizeX,sizeY];
+            _Overworld = new GridItem[sizeX, sizeY];
             _Underworld = new GridItem[sizeX, sizeY];
             Random r = new Random(seed);
             _grassPerlin = new Perlin(r.Next());
@@ -47,17 +47,17 @@ namespace Mole_on_Parole
             double _concreteChance = 0.5;
             double _dugChance = 0.3;
 
-            for (int x = 0; x<sizeX; x++)
+            for (int x = 0; x < sizeX; x++)
             {
                 for (int y = 0; y < sizeY; y++)
                 {
                     if (_concretePerlin.perlin(x * _concretePerlinScale, y * _concretePerlinScale, 0) < _concreteChance)
                     {
-                        _Overworld[x,y] = new Concrete(new Vector2(x*32, y*32), new Color(150, 150, 150), _concreteTexture);
+                        _Overworld[x, y] = new Concrete(new Vector2(x * 32, y * 32), new Color(150, 150, 150), _concreteTexture);
                     }
                     else
                     {
-                        _Overworld[x,y] = new Grass(new Vector2(x*32, y*32), Color.Green, _grassTexture);
+                        _Overworld[x, y] = new Grass(new Vector2(x * 32, y * 32), Color.Green, _grassTexture);
                     }
                     if (_undergroundDugPerlin.perlin(x * _undergroundDugPerlinScale, y * _undergroundDugPerlinScale, 0) < _dugChance)
                     {
@@ -77,7 +77,7 @@ namespace Mole_on_Parole
         }
         public void Draw(SpriteBatch spriteBatch, Vector2 position, bool underground, Vector2 center)
         {
-            foreach(Tuple<int, int> coord in coordsToDraw)
+            foreach (Tuple<int, int> coord in coordsToDraw)
             {
                 _Overworld[coord.Item1, coord.Item2].Draw(spriteBatch, position, underground, center);
             }
@@ -89,12 +89,12 @@ namespace Mole_on_Parole
             {
                 _Underworld[coord.Item1, coord.Item2].Draw(spriteBatch, position, false, center);
             }
-            if(underground) mole.Draw(spriteBatch, position, underground, center);
+            if (underground) mole.Draw(spriteBatch, position, underground, center);
             foreach (Tuple<int, int> coord in coordsToDraw)
             {
                 _Overworld[coord.Item1, coord.Item2].Draw(spriteBatch, position, underground, center);
             }
-            if(!underground) mole.Draw(spriteBatch, position, underground, center);
+            if (!underground) mole.Draw(spriteBatch, position, underground, center);
         }
 
         public void Update(double totalSeconds, Vector2 position)
@@ -119,6 +119,34 @@ namespace Mole_on_Parole
                             coordsToDraw.Add(new Tuple<int, int>((int)a, (int)b));
                         }
                     }
+                }
+            }
+        }
+
+        public bool IsClosestGrass(Vector2 position)
+        {
+            return ((position.X > 0 && position.Y > 0) &&
+                (_Overworld[((int)(position.X) / 32), ((int)(position.Y) / 32)] is Grass));
+        }
+
+        public bool IsClosestDug(Vector2 position)
+        {
+            return ((position.X > 0 && position.Y > 0) &&
+                (_Overworld[((int)(position.X) / 32), ((int)(position.Y) / 32)] is Grass) &&
+                ((_Overworld[((int)(position.X) / 32), ((int)(position.Y) / 32)]) as Grass).isDug());
+        }
+
+        internal void DigHole(Vector2 position)
+        {
+            int x = ((int)(position.X) / 32);
+            int y = ((int)(position.Y) / 32);
+            if (x > 0 && y > 0)
+            {
+                GridItem closestPoint = _Overworld[x, y];
+                if (closestPoint is Grass)
+                {
+                    (closestPoint as Grass).Dig();
+                    _Underworld[x, y] = new UndergroundDug(new Vector2(x * 32, y * 32), Color.Gray, _undergroundDugTexture);
                 }
             }
         }
