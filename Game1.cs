@@ -32,6 +32,8 @@ namespace Mole_on_Parole
         private int numValuables = 20;
         private int numMen = 30;
 
+        int closestManIndex = 0;
+
         private bool qDown = false;
         public Game1()
         {
@@ -132,7 +134,7 @@ namespace Mole_on_Parole
             {
                 mole.Slow(Directions.RIGHT, (float)gameTime.ElapsedGameTime.TotalSeconds);
             }
-            if(kState.IsKeyDown(Keys.Q))
+            if(kState.IsKeyDown(Keys.Q) && mole.GetLives() > 0)
             {
                 qDown = true;
             }
@@ -165,7 +167,7 @@ namespace Mole_on_Parole
                     mole.SetAttachedValuable(null);
                 }
 
-                int closestManIndex = 0;
+            
                 for (var i = 0; i < men.Count; i++)
                 {
                     if (Vector2.Distance(men[i].GetPosition(), mole.GetPosition()) < (Vector2.Distance(men[closestManIndex].GetPosition(), mole.GetPosition())))
@@ -215,6 +217,13 @@ namespace Mole_on_Parole
             _spriteBatch.DrawString(spriteFont, "Score: " + mole.GetScore(), new Vector2(20, 20), Color.White);
 
             _spriteBatch.DrawString(spriteFont, "Lives Left: " + mole.GetLives(), new Vector2(1250, 20), Color.White);
+            _spriteBatch.DrawString(spriteFont, "Dig Spaces: " + mole.GetDigSpaces(), new Vector2(20, 100), Color.White);
+
+            _spriteBatch.DrawString(spriteFont, "Man Distance Away: " + Convert.ToInt32((Vector2.Distance(men[closestManIndex].GetPosition(), mole.GetPosition()))/32), new Vector2(20, 180), Color.White);
+            if (mole.GetLives() == 0)
+            {
+                _spriteBatch.DrawString(spriteFont, "GAME OVER", center, Color.White);
+            }
             _spriteBatch.End();
 
 
