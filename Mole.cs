@@ -328,6 +328,16 @@ namespace Mole_on_Parole
             _attachedValuable = valuable;
         }
 
+        public void LoseDigSpace()
+        {
+            _digSpaces--;
+        }
+
+        public int GetDigSpaces()
+        {
+            return _digSpaces;
+        }
+
         public IValuable GetAttachedValuable()
         {
             return this._attachedValuable;
