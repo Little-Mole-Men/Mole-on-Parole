@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Mole_on_Parole
 {
@@ -164,6 +165,7 @@ namespace Mole_on_Parole
                 if(map.IsClosestDug(mole.GetPosition()) && mole.HasAttachedValuable())
                 {
                     collectibles.Remove(mole.GetAttachedValuable());
+                    mole.IncreaseScore(10);
                     mole.SetAttachedValuable(null);
                 }
 

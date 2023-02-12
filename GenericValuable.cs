@@ -71,7 +71,6 @@ namespace Mole_on_Parole
             {
                 mole.SetAttachedValuable(this);
                 Console.WriteLine("Mole picked up valuable");
-                mole.IncreaseScore(_value);
                 return true;
             }
             return false;
