@@ -15,6 +15,7 @@ namespace Mole_on_Parole
         
         List<IFood> earthworms = new List<IFood>();
         List<IValuable> collectibles = new List<IValuable>();
+        List<Man> men = new List<Man>();
         Grid grid;
         Texture2D moleTexture;
         Texture2D manTexture;
@@ -29,6 +30,7 @@ namespace Mole_on_Parole
 
         private int numWorms = 1000;
         private int numValuables = 20;
+        private int numMen = 30;
 
         private bool qDown = false;
         public Game1()
@@ -77,6 +79,14 @@ namespace Mole_on_Parole
                 GenericValuable valuable;
                 valuable = new GenericValuable(valuableTexture, new Vector2(rd.Next(0, 32000), rd.Next(0, 32000)), 2, 10);
                 collectibles.Add(valuable);
+
+            }
+
+            for (var i = 0; i < numMen; i++)
+            {
+                Man man;
+                man = new Man(manTexture, new Vector2(rd.Next(0, 32000), rd.Next(0, 32000)));
+                men.Add(man);
 
             }
             base.Initialize();
@@ -154,8 +164,18 @@ namespace Mole_on_Parole
                     collectibles.Remove(mole.GetAttachedValuable());
                     mole.SetAttachedValuable(null);
                 }
-                man.DetectAndKillMole(gameTime.ElapsedGameTime.TotalSeconds, mole);
-                man.Update(gameTime.ElapsedGameTime.TotalSeconds, mole.GetPosition());
+
+                int closestManIndex = 0;
+                for (var i = 0; i < men.Count; i++)
+                {
+                    if (Vector2.Distance(men[i].GetPosition(), mole.GetPosition()) < (Vector2.Distance(men[closestManIndex].GetPosition(), mole.GetPosition())))
+                    {
+                        closestManIndex = i;
+                    }
+                }
+                men[closestManIndex].DetectAndKillMole(gameTime.ElapsedGameTime.TotalSeconds, mole);
+                men[closestManIndex].Update(gameTime.ElapsedGameTime.TotalSeconds, mole.GetPosition());
+
                 earthworms.RemoveAll(elem => elem.DetectMoleClose(mole) == true);
                 foreach (var valuable in collectibles)
                 {
@@ -185,12 +205,16 @@ namespace Mole_on_Parole
             {
                 valuable.Draw(_spriteBatch, mole.GetPosition(), mole.Underground, center);
             }
-            man.Draw(_spriteBatch, mole.GetPosition(), mole.Underground, center);
+            foreach (var man in men)
+            {
+                man.Draw(_spriteBatch, mole.GetPosition(), mole.Underground, center);
+            }
 
             spriteFont = Content.Load<SpriteFont>("File");
 
-            _spriteBatch.DrawString(spriteFont, "Score: " + mole.GetScore(), new Vector2(_graphics.PreferredBackBufferWidth / 2 - 50, 20), Color.Black);
+            _spriteBatch.DrawString(spriteFont, "Score: " + mole.GetScore(), new Vector2(20, 20), Color.White);
 
+            _spriteBatch.DrawString(spriteFont, "Lives Left: " + mole.GetLives(), new Vector2(1250, 20), Color.White);
             _spriteBatch.End();
 
 
