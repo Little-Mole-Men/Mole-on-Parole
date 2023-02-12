@@ -19,6 +19,7 @@ namespace Mole_on_Parole
         public int _frameTimer = 0;
         public int _animationFrame = 0;
         private int _lastDirection = 0;
+        private bool _vision;
 
         public Man(Texture2D manTexture, Vector2 position)
         {
@@ -94,6 +95,16 @@ namespace Mole_on_Parole
                 return mole.GetKilled(totalSeconds);
             }
             else return false;
+        }
+
+        public void SetVision(bool vision)
+        {
+            _vision = vision;
+        }
+
+        public Vector2 GetPosition()
+        {
+            return _position;
         }
     }
 }
