@@ -22,6 +22,7 @@ namespace Mole_on_Parole
         public void Dig()
         {
             _dug = true;
+            _color = Color.SaddleBrown;
         }
         public bool isDug()
         {
