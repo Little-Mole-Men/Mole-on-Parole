@@ -48,7 +48,6 @@ namespace Mole_on_Parole
 
             _graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
             _graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
-            _graphics.HardwareModeSwitch = true;
             _graphics.IsFullScreen = true;
             _graphics.ApplyChanges();
 
@@ -156,10 +155,10 @@ namespace Mole_on_Parole
                 foreach (var valuable in collectibles)
                 {
                     valuable.DetectMoleClose(mole);
-                    if (valuable.GetAttached())
-                    {
-                        valuable.SetPosition(mole.GetPosition());
-                    }
+                }
+                if(mole.HasAttachedValuable())
+                {
+                    mole.GetAttachedValuable().SetPosition(mole.GetPosition());
                 }
             }
             base.Update(gameTime);
