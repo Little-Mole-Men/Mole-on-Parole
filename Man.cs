@@ -44,7 +44,6 @@ namespace Mole_on_Parole
                 _frameTimer = 0;
                 _animationFrame = (_animationFrame + 1) % 4;
             }
-            Debug.WriteLine(_velocity.X.ToString()+ " "+ _velocity.X.ToString());
             if (_velocity.X < 5 && _velocity.X > -5 && _velocity.Y < 5 && _velocity.Y > -5)
             {
                 spr = 2;
