@@ -9,7 +9,7 @@ namespace Mole_on_Parole
         private IValuable _attachedCollectible = null;
         private Vector2 _velocity;
         private Vector2 _position;
-        private float _baseMaxSpeed = 50;
+        private float _baseMaxSpeed = 200;
         private float _killRange = 20;
         private float _baseAcceleration;
         private float _acceleration;
@@ -52,12 +52,13 @@ namespace Mole_on_Parole
             _position += _velocity * (float) totalSeconds;
         }
 
-        public void DetectAndKillMole(double totalSeconds, Mole mole)
+        public bool DetectAndKillMole(double totalSeconds, Mole mole)
         {
             if (Vector2.Distance(_position, mole.GetPosition()) <= _killRange)
             {
-                mole.GetKilled();
+                return mole.GetKilled(totalSeconds);
             }
+            else return false;
         }
     }
 }

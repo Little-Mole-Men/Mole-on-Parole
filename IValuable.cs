@@ -10,7 +10,6 @@ namespace Mole_on_Parole
     public interface IValuable : ICollectible
     {
         public float GetWeight();
-        public bool GetAttached();
         public void SetPosition(Vector2 vec);
     }
 }

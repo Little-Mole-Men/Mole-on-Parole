@@ -15,17 +15,21 @@ namespace Mole_on_Parole
     public class Mole : IDrawable, IUpdatable
     {
         private int _lives;
+        private double _health;
+        private const double _maxHealth = 100;
+        private const double _depletionRate = 100;
         private IValuable _attachedValuable = null;
         private int _digSpaces = 50;
         private Vector2 _velocity;
         private Vector2 _position;
-        private float _baseMaxSpeed = 200;
+        private const float _baseMaxSpeed = 200;
         private float _baseAcceleration;
         private float _acceleration;
         private float _deceleration;
         private float _maxSpeed;
         private Texture2D _texture;
         private int _score;
+        private Vector2 _originalPosition;
         public bool Underground { get; set; }
 
         public Mole(Texture2D moleTexture)
@@ -36,6 +40,7 @@ namespace Mole_on_Parole
             _baseAcceleration = 2 * _baseMaxSpeed;
             Underground = true;
             _score = 0;
+            _health = _maxHealth;
         }
 
         public bool HasAttachedValuable()
@@ -50,6 +55,7 @@ namespace Mole_on_Parole
 
         public void SetPosition(Vector2 position)
         {
+            if (_originalPosition.X == 0) _originalPosition = position;
             _position = position;
         }
 
@@ -122,15 +128,32 @@ namespace Mole_on_Parole
             }
         }
 
-        public void GetKilled()
+        public bool GetKilled(double totalSeconds)
         {
-            if (_lives != 0)
+            if (_health != 0)
+            {
+                _health -= _depletionRate * totalSeconds;
+            }
+            if(_health <= 0)
             {
                 _lives--;
+                _reset();
+            }
+            if (_lives == 0)
+            {
                 Console.WriteLine("MOLE HAS BEEN KILLED ");
                 Console.WriteLine(_lives);
+                return true;
             };
+            return false;
+        }
 
+        private void _reset()
+        {
+            _position = _originalPosition;
+            _attachedValuable = null;
+            _velocity = new Vector2(0, 0);
+            Underground = true;
         }
 
         public void EatWorm(int value)
