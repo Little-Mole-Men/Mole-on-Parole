@@ -352,5 +352,10 @@ namespace Mole_on_Parole
         {
             _score += scoreToAdd;
         }
+
+        public int GetLives()
+        {
+            return _lives;
+        }
     }
 }
