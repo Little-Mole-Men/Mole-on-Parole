@@ -9,7 +9,7 @@ namespace Mole_on_Parole
         private IValuable _attachedCollectible = null;
         private Vector2 _velocity;
         private Vector2 _position;
-        private float _baseMaxSpeed = 200;
+        private float _baseMaxSpeed = 150;
         private float _killRange = 20;
         private float _baseAcceleration;
         private float _acceleration;
