@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,7 +21,9 @@ namespace Mole_on_Parole
         private int eatRange = 30;
 
         private const int value = 10;
-
+        private int _frameTimer = 0;
+        private int _frameDirection = 0;
+        private int _animationFrame = 0;
 
         public Earthworm(Texture2D wormTexture, Vector2 position)
         {
@@ -30,21 +33,52 @@ namespace Mole_on_Parole
 
         public void Draw(SpriteBatch spriteBatch, Vector2 position, bool underground, Vector2 center)
         {
-            Vector2 scale = new Vector2(0.5f, 0.5f); //50% smaller
+            _frameTimer++;
+
+            if (_frameTimer == 5)
+            {
+                _frameTimer = 0;
+                if (_frameDirection == 0)
+                {
+                    if (_animationFrame == 3)
+                    {
+                        _animationFrame--;
+                        _frameDirection = 1;
+                    }
+                    else
+                    {
+                        _animationFrame++;
+                    }
+
+
+                }
+                else if (_frameDirection == 1)
+                {
+                    if (_animationFrame == 0)
+                    {
+                        _animationFrame++;
+                        _frameDirection = 0;
+                    }
+                    else
+                    {
+                        _animationFrame--;
+                    }
+                }
+            }
             Vector2 pos = Vector2.Add(Vector2.Negate(position), _position);
             pos += center;
 
             spriteBatch.Draw(
-                _texture,
-                pos,
-                null,
-                Color.White,
-                0f,
-                new Vector2(_texture.Width / 2, _texture.Height / 2),
-                scale,
-                SpriteEffects.None,
-                0f
-            );
+                    _texture,
+                    pos,
+                    new Rectangle(32 * _animationFrame, 0, 32, 32),
+                    Color.White,
+                    0f,
+                    new Vector2(_texture.Width / 8, _texture.Height / 2),
+                    Vector2.One,
+                    SpriteEffects.None,
+                    0f
+                );
         }
 
         public float GetValue()

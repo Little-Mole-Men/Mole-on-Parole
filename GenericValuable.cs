@@ -38,7 +38,7 @@ namespace Mole_on_Parole
 
         public void Draw(SpriteBatch spriteBatch, Vector2 position, bool underground, Vector2 center)
         {
-            Vector2 scale = new Vector2(0.2f, 0.2f); //80% smaller
+            Vector2 scale = new Vector2(1f, 1f); //80% smaller
             Vector2 pos = Vector2.Add(Vector2.Negate(position), _position);
             pos += center;
 
