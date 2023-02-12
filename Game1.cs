@@ -42,7 +42,7 @@ namespace Mole_on_Parole
         {
             // TODO: Add your initialization logic here
             moleTexture = Content.Load<Texture2D>("molesheet");
-            manTexture = Content.Load<Texture2D>("ball");
+            manTexture = Content.Load<Texture2D>("man");
             wormTexture = Content.Load<Texture2D>("ball");
             valuableTexture = Content.Load<Texture2D>("ball");
 

@@ -29,6 +29,7 @@ namespace Mole_on_Parole
         public bool Underground { get; set; }
         public int _frameTimer = 0;
         public int _animationFrame = 0;
+        private int _lastDirection = 0;
 
         public Mole(Texture2D moleTexture)
         {
@@ -69,33 +70,39 @@ namespace Mole_on_Parole
             }
 
             int spr = 2;
-            Rectangle sourceRectangle;
-            if ((_velocity.X * _velocity.X)>(_velocity.Y * _velocity.Y))
+            if (_velocity.X == 0 && _velocity.Y == 0)
             {
-                if(_velocity.X > 0)
+                spr = _lastDirection;
+            }
+            else {
+                if ((_velocity.X * _velocity.X) > (_velocity.Y * _velocity.Y))
                 {
-                    spr = 0;
+                    if (_velocity.X > 0)
+                    {
+                        spr = 0;
+                    }
+                    else
+                    {
+                        spr = 1;
+
+                    }
                 }
                 else
                 {
-                    spr = 1;
+                    if (_velocity.Y > 0)
+                    {
+                        spr = 2;
+                    }
+                    else
+                    {
+                        spr = 3;
+                    }
 
                 }
+                _lastDirection = spr;
             }
-            else
-            {
-                if (_velocity.Y > 0)
-                {
-                    spr = 2;
-                }
-                else
-                {
-                    spr = 3;
-                }
-
-            }
-            sourceRectangle = new Rectangle(32 * _animationFrame, (32 * spr), 32, 32);
-            spriteBatch.Draw(_texture, pos, sourceRectangle, Color.Brown, 0f, new Vector2(_texture.Width / 4, _texture.Height / 6), Vector2.One, SpriteEffects.None, 0f);
+            Rectangle sourceRectangle = new Rectangle(32 * _animationFrame, (32 * spr), 32, 32);
+            spriteBatch.Draw(_texture, pos, sourceRectangle, Color.White, 0f, new Vector2(_texture.Width / 4, _texture.Height / 6), Vector2.One, SpriteEffects.None, 0f);
 
         }
 
