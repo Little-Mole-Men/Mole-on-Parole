@@ -127,12 +127,13 @@ namespace Mole_on_Parole
             
         }
 
-        public void DetectAndKillMole(double totalSeconds, Mole mole)
+        public bool DetectAndKillMole(double totalSeconds, Mole mole)
         {
             if (Vector2.Distance(_position, mole.GetPosition()) <= _killRange)
             {
-                mole.GetKilled();
+                return mole.GetKilled(totalSeconds);
             }
+            else return false;
         }
     }
 }

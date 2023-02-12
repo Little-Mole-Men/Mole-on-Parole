@@ -31,11 +31,6 @@ namespace Mole_on_Parole
             _attached = false;
         }
 
-        public bool GetAttached()
-        {
-            return _attached;
-        }
-
         public void SetPosition(Vector2 molePosition)
         {
             _position = molePosition + new Vector2(-35, 0);
@@ -76,7 +71,6 @@ namespace Mole_on_Parole
             {
                 mole.SetAttachedValuable(this);
                 Console.WriteLine("Mole picked up valuable");
-                _attached = true;
                 mole.IncreaseScore(_value);
                 return true;
             }
