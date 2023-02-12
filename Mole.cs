@@ -60,37 +60,42 @@ namespace Mole_on_Parole
 
             Vector2 pos = Vector2.Add(Vector2.Negate(position), _position);
             pos += center;
-            Rectangle sourceRectangle;
 
-            if (_frameTimer = 5)
+            if (_frameTimer == 5)
             {
-                _frameTimer = 0
+                _frameTimer = 0;
                 _animationFrame = (_animationFrame + 1) % 2;
             }
 
+            int spr = 2;
+            Rectangle sourceRectangle;
             if ((_velocity.X * _velocity.X)>(_velocity.Y * _velocity.Y))
             {
                 if(_velocity.X > 0)
                 {
-                    sourceRectangle = new Rectangle(32*_animationFrame, 0, 32+(32*_animationFrame), 32);
+                    spr = 0;
                 }
                 else
                 {
-                    sourceRectangle = new Rectangle(32 * _animationFrame, 0, 32 + (32 * _animationFrame), 32);
+                    spr = 1;
+
                 }
             }
             else
             {
                 if (_velocity.Y > 0)
                 {
-
+                    spr = 2;
                 }
                 else
                 {
-
+                    spr = 3;
                 }
+
             }
-            spriteBatch.Draw(_texture, pos, null, Color.Brown, 0f, new Vector2(_texture.Width / 2, _texture.Height / 2), Vector2.One, SpriteEffects., 0f); 
+            sourceRectangle = new Rectangle(32 * _animationFrame, (32 * spr), 32, 32);
+            spriteBatch.Draw(_texture, pos, sourceRectangle, Color.Brown, 0f, new Vector2(_texture.Width / 4, _texture.Height / 6), Vector2.One, SpriteEffects.None, 0f);
+
         }
 
 
