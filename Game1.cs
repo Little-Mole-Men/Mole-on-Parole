@@ -139,7 +139,7 @@ namespace Mole_on_Parole
                     mole.Underground = !mole.Underground;
                 }
             }
-
+            mole.setSurroundings(map.GetSurroundings(mole.GetPosition()));
             mole.Update(gameTime.ElapsedGameTime.TotalSeconds, mole.GetPosition());
             map.Update(gameTime.ElapsedGameTime.TotalSeconds, mole.GetPosition());
             if (!mole.Underground)

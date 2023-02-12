@@ -34,6 +34,10 @@ namespace Mole_on_Parole
         public int _frameTimer = 0;
         public int _animationFrame = 0;
         private int _lastDirection = 0;
+        private Directions _digDirection = Directions.UP;
+        private bool _digging = false;
+        private GridItem[,] _surroundings;
+        private double _digTime;
 
         public Mole(Texture2D moleTexture)
         {
@@ -44,6 +48,8 @@ namespace Mole_on_Parole
             Underground = true;
             _score = 0;
             _health = _maxHealth;
+            _surroundings = new GridItem[3, 3];
+            _digTime = 0;
         }
 
         public bool HasAttachedValuable()
@@ -80,7 +86,8 @@ namespace Mole_on_Parole
             {
                 spr = _lastDirection;
             }
-            else {
+            else
+            {
                 if ((_velocity.X * _velocity.X) > (_velocity.Y * _velocity.Y))
                 {
                     if (_velocity.X > 0)
@@ -112,13 +119,81 @@ namespace Mole_on_Parole
 
         }
 
+        public void setSurroundings(GridItem[,] surroundings)
+        {
+            _surroundings = surroundings;
+        }
+
 
         public void Update(double totalSeconds, Vector2 position)
         {
+            if (!Underground)
+            {
+                _digging = false;
+                _digTime = 0;
+            }
+            else if (_digging) _digTime += totalSeconds;
             _acceleration = _baseAcceleration / ((_attachedValuable != null) ? _attachedValuable.GetWeight() : 1);
             _deceleration = _baseAcceleration * ((_attachedValuable != null) ? _attachedValuable.GetWeight() : 1);
             _maxSpeed = _baseMaxSpeed / ((_attachedValuable != null) ? _attachedValuable.GetWeight() : 1);
-            _position += _velocity * (float)totalSeconds;
+            if (_digging && _digTime > 0.5)
+            {
+                switch (_digDirection)
+                {
+                    case Directions.UP:
+                        _surroundings[1, 0].Dig();
+                        break;
+                    case Directions.DOWN:
+                        _surroundings[1, 2].Dig();
+                        break;
+                    case Directions.LEFT:
+                        (_surroundings[0, 1]).Dig();
+                        break;
+                    case Directions.RIGHT:
+                        (_surroundings[2, 1]).Dig();
+                        break;
+                }
+                _digging = false;
+                _digTime = 0;
+            }
+            float xPosInBlock = _position.X % 32;
+            float yPosInBlock = _position.Y % 32;
+            if (Underground)
+            {
+                if (_velocity.X > 0 && _surroundings[2, 1] is UndergroundNotDug && !((_surroundings[2, 1] as UndergroundNotDug).Dug)
+                    && xPosInBlock + _velocity.X * (float)totalSeconds > 16)
+                {
+                    Console.WriteLine("blocked");
+                    _position.X += (16 - xPosInBlock);
+                }
+                else if (_velocity.X < 0 && _surroundings[0, 1] is UndergroundNotDug && !(_surroundings[0, 1] as UndergroundNotDug).Dug
+                        && xPosInBlock + _velocity.X * (float)totalSeconds < 16)
+                {
+                    _position.X -= (xPosInBlock - 16);
+                }
+                else
+                {
+                    _position.X += _velocity.X * (float)totalSeconds;
+                }
+                if (_velocity.Y > 0 && _surroundings[1, 2] is UndergroundNotDug && !(_surroundings[1, 2] as UndergroundNotDug).Dug
+                    && yPosInBlock + _velocity.Y * (float)totalSeconds > 16)
+                {
+                    _position.Y += (16 - yPosInBlock);
+                }
+                else if (_velocity.Y < 0 && _surroundings[1, 0] is UndergroundNotDug && !(_surroundings[1, 0] as UndergroundNotDug).Dug
+                        && yPosInBlock + _velocity.Y * (float)totalSeconds < 16)
+                {
+                    _position.Y -= (yPosInBlock - 16);
+                }
+                else
+                {
+                    _position.Y += _velocity.Y * (float)totalSeconds;
+                }
+            }
+            else
+            {
+                _position += _velocity * (float)totalSeconds;
+            }
         }
 
         public void Accelerate(Directions direction, float totalSeconds)
@@ -127,15 +202,43 @@ namespace Mole_on_Parole
             {
                 case Directions.UP:
                     _velocity.Y = Math.Max((_velocity.Y - _acceleration * totalSeconds), -_maxSpeed);
+                    if (Underground && !_digging && _surroundings[1, 0] is UndergroundNotDug)
+                    {
+                        _digging = true;
+                        if (_digDirection != Directions.UP) _digTime = 0;
+                        _digTime += totalSeconds;
+                        _digDirection = direction;
+                    }
                     break;
                 case Directions.DOWN:
                     _velocity.Y = Math.Min((_velocity.Y + _acceleration * totalSeconds), _maxSpeed);
+                    if (Underground && !_digging && _surroundings[1, 2] is UndergroundNotDug)
+                    {
+                        _digging = true;
+                        if (_digDirection != direction) _digTime = 0;
+                        _digTime += totalSeconds;
+                        _digDirection = direction;
+                    }
                     break;
                 case Directions.LEFT:
                     _velocity.X = Math.Max((_velocity.X - _acceleration * totalSeconds), -_maxSpeed);
+                    if (Underground && !_digging && _surroundings[0, 1] is UndergroundNotDug)
+                    {
+                        _digging = true;
+                        if (_digDirection != direction) _digTime = 0;
+                        _digTime += totalSeconds;
+                        _digDirection = direction;
+                    }
                     break;
                 case Directions.RIGHT:
                     _velocity.X = Math.Min((_velocity.X + _acceleration * totalSeconds), _maxSpeed);
+                    if (Underground && !_digging && _surroundings[2, 1] is UndergroundNotDug)
+                    {
+                        _digging = true;
+                        if (_digDirection != direction) _digTime = 0;
+                        _digTime += totalSeconds;
+                        _digDirection = direction;
+                    }
                     break;
             }
             if (_velocity.LengthSquared() > Math.Pow(_maxSpeed, 2))
@@ -159,6 +262,11 @@ namespace Mole_on_Parole
                     {
                         _velocity.Y = 0;
                     }
+                    if (_digDirection == Directions.UP || _digDirection == Directions.DOWN)
+                    {
+                        _digging = false;
+                        _digTime = 0;
+                    }
                     break;
                 case Directions.LEFT:
                 case Directions.RIGHT:
@@ -170,6 +278,11 @@ namespace Mole_on_Parole
                     {
                         _velocity.X = 0;
                     }
+                    if (_digDirection == Directions.LEFT || _digDirection == Directions.RIGHT)
+                    {
+                        _digging = false;
+                        _digTime = 0;
+                    }
                     break;
             }
         }
@@ -180,7 +293,7 @@ namespace Mole_on_Parole
             {
                 _health -= _depletionRate * totalSeconds;
             }
-            if(_health <= 0)
+            if (_health <= 0)
             {
                 _lives--;
                 _reset();
@@ -200,6 +313,8 @@ namespace Mole_on_Parole
             _attachedValuable = null;
             _velocity = new Vector2(0, 0);
             Underground = true;
+            _digging = false;
+            _digTime = 0;
         }
 
         public void EatWorm(int value)
@@ -225,9 +340,7 @@ namespace Mole_on_Parole
 
         public void IncreaseScore(int scoreToAdd)
         {
-            _score += scoreToAdd;   
+            _score += scoreToAdd;
         }
     }
-
-
 }
