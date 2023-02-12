@@ -65,11 +65,11 @@ namespace Mole_on_Parole
                 {
                     if (_velocity.Y > 0)
                     {
-                        spr = 2;
+                        spr = 0;
                     }
                     else
                     {
-                        spr = 3;
+                        spr = 1;
                     }
 
                 }
