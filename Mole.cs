@@ -127,73 +127,76 @@ namespace Mole_on_Parole
 
         public void Update(double totalSeconds, Vector2 position)
         {
-            if (!Underground)
+            if (_lives > 0)
             {
-                _digging = false;
-                _digTime = 0;
-            }
-            else if (_digging) _digTime += totalSeconds;
-            _acceleration = _baseAcceleration / ((_attachedValuable != null) ? _attachedValuable.GetWeight() : 1);
-            _deceleration = _baseAcceleration * ((_attachedValuable != null) ? _attachedValuable.GetWeight() : 1);
-            _maxSpeed = _baseMaxSpeed / ((_attachedValuable != null) ? _attachedValuable.GetWeight() : 1);
-            if (_digging && _digTime > 0.5 && _digSpaces > 0) 
-            {
-                switch (_digDirection)
+                if (!Underground)
                 {
-                    case Directions.UP:
-                        _surroundings[1, 0].Dig();
-                        break;
-                    case Directions.DOWN:
-                        _surroundings[1, 2].Dig();
-                        break;
-                    case Directions.LEFT:
-                        (_surroundings[0, 1]).Dig();
-                        break;
-                    case Directions.RIGHT:
-                        (_surroundings[2, 1]).Dig();
-                        break;
+                    _digging = false;
+                    _digTime = 0;
                 }
-                _digSpaces--;
-                _digging = false;
-                _digTime = 0;
-            }
-            float xPosInBlock = _position.X % 32;
-            float yPosInBlock = _position.Y % 32;
-            if (Underground)
-            {
-                if (_velocity.X > 0 && _surroundings[2, 1] is UndergroundNotDug && !((_surroundings[2, 1] as UndergroundNotDug).Dug)
-                    && xPosInBlock + _velocity.X * (float)totalSeconds > 16)
+                else if (_digging) _digTime += totalSeconds;
+                _acceleration = _baseAcceleration / ((_attachedValuable != null) ? _attachedValuable.GetWeight() : 1);
+                _deceleration = _baseAcceleration * ((_attachedValuable != null) ? _attachedValuable.GetWeight() : 1);
+                _maxSpeed = _baseMaxSpeed / ((_attachedValuable != null) ? _attachedValuable.GetWeight() : 1);
+                if (_digging && _digTime > 0.5 && _digSpaces > 0)
                 {
-                    Console.WriteLine("blocked");
-                    _position.X += (16 - xPosInBlock);
+                    switch (_digDirection)
+                    {
+                        case Directions.UP:
+                            _surroundings[1, 0].Dig();
+                            break;
+                        case Directions.DOWN:
+                            _surroundings[1, 2].Dig();
+                            break;
+                        case Directions.LEFT:
+                            (_surroundings[0, 1]).Dig();
+                            break;
+                        case Directions.RIGHT:
+                            (_surroundings[2, 1]).Dig();
+                            break;
+                    }
+                    _digSpaces--;
+                    _digging = false;
+                    _digTime = 0;
                 }
-                else if (_velocity.X < 0 && _surroundings[0, 1] is UndergroundNotDug && !(_surroundings[0, 1] as UndergroundNotDug).Dug
-                        && xPosInBlock + _velocity.X * (float)totalSeconds < 16)
+                float xPosInBlock = _position.X % 32;
+                float yPosInBlock = _position.Y % 32;
+                if (Underground)
                 {
-                    _position.X -= (xPosInBlock - 16);
+                    if (_velocity.X > 0 && _surroundings[2, 1] is UndergroundNotDug && !((_surroundings[2, 1] as UndergroundNotDug).Dug)
+                        && xPosInBlock + _velocity.X * (float)totalSeconds > 16)
+                    {
+                        Console.WriteLine("blocked");
+                        _position.X += (16 - xPosInBlock);
+                    }
+                    else if (_velocity.X < 0 && _surroundings[0, 1] is UndergroundNotDug && !(_surroundings[0, 1] as UndergroundNotDug).Dug
+                            && xPosInBlock + _velocity.X * (float)totalSeconds < 16)
+                    {
+                        _position.X -= (xPosInBlock - 16);
+                    }
+                    else
+                    {
+                        _position.X += _velocity.X * (float)totalSeconds;
+                    }
+                    if (_velocity.Y > 0 && _surroundings[1, 2] is UndergroundNotDug && !(_surroundings[1, 2] as UndergroundNotDug).Dug
+                        && yPosInBlock + _velocity.Y * (float)totalSeconds > 16)
+                    {
+                        _position.Y += (16 - yPosInBlock);
+                    }
+                    else if (_velocity.Y < 0 && _surroundings[1, 0] is UndergroundNotDug && !(_surroundings[1, 0] as UndergroundNotDug).Dug
+                            && yPosInBlock + _velocity.Y * (float)totalSeconds < 16)
+                    {
+                        _position.Y -= (yPosInBlock - 16);
+                    }
+                    else
+                    {
+                        _position.Y += _velocity.Y * (float)totalSeconds;
+                    }
                 }
                 else
                 {
-                    _position.X += _velocity.X * (float)totalSeconds;
+                    _position += _velocity * (float)totalSeconds;
                 }
-                if (_velocity.Y > 0 && _surroundings[1, 2] is UndergroundNotDug && !(_surroundings[1, 2] as UndergroundNotDug).Dug
-                    && yPosInBlock + _velocity.Y * (float)totalSeconds > 16)
-                {
-                    _position.Y += (16 - yPosInBlock);
-                }
-                else if (_velocity.Y < 0 && _surroundings[1, 0] is UndergroundNotDug && !(_surroundings[1, 0] as UndergroundNotDug).Dug
-                        && yPosInBlock + _velocity.Y * (float)totalSeconds < 16)
-                {
-                    _position.Y -= (yPosInBlock - 16);
-                }
-                else
-                {
-                    _position.Y += _velocity.Y * (float)totalSeconds;
-                }
-            }
-            else
-            {
-                _position += _velocity * (float)totalSeconds;
             }
         }
 
