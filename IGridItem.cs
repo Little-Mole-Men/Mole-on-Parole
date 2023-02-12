@@ -22,7 +22,7 @@ namespace Mole_on_Parole
             spriteBatch.Draw(_texture, pos, (underground ? 0.3f : 1) * _color);
         }
 
-        public void Dig()
+        public virtual void Dig()
         {
             Dug = true;
         }

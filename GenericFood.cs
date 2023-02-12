@@ -19,7 +19,7 @@ namespace Mole_on_Parole
 
         private int eatRange = 30;
 
-        private const int value = 2;
+        private const int value = 10;
 
 
         public Earthworm(Texture2D wormTexture, Vector2 position)

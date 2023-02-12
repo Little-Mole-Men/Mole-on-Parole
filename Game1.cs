@@ -54,7 +54,7 @@ namespace Mole_on_Parole
             center = new Vector2(_graphics.PreferredBackBufferWidth / 2, _graphics.PreferredBackBufferHeight / 2);
 
             mole = new Mole(moleTexture);
-            mole.SetPosition(center);
+            mole.SetPosition(new Vector2(500, 500) * 32);
             Texture2D grass = Content.Load<Texture2D>("grass");
             map = new Map(1000, 1000, 1, Content.Load<Texture2D>("grass"), Content.Load<Texture2D>("grass"), Content.Load<Texture2D>("grass"), Content.Load<Texture2D>("grass"));
             map.setViewRadius(20);
@@ -132,11 +132,16 @@ namespace Mole_on_Parole
 
                 if(!mole.HasAttachedValuable() && map.IsClosestGrass(mole.GetPosition()))
                 {
-                    if (!map.IsClosestDug(mole.GetPosition()))
+                    if (!map.IsClosestDug(mole.GetPosition()) && mole.GetDigSpaces() > 0)
                     {
                         map.DigHole(mole.GetPosition());
+                        mole.LoseDigSpace();
+                        mole.Underground = !mole.Underground;
                     }
-                    mole.Underground = !mole.Underground;
+                    else if (map.IsClosestDug(mole.GetPosition()))
+                    {
+                        mole.Underground = !mole.Underground;
+                    }
                 }
             }
             mole.setSurroundings(map.GetSurroundings(mole.GetPosition()));
